@@ -1,0 +1,275 @@
+\documentclass[11pt]{article}
+\usepackage{../stat110}
+\usepackage{graphicx}
+\usepackage{epigraph}
+\usepackage{hyperref}
+
+%\STAFF
+
+\begin{document}
+
+\SectionNotes{13}{Final Review Session}{Kevin Eskici, Luis Perez}{Willy Xiao, Aidi Zhang}
+
+
+\setlength{\epigraphwidth}{.6\textwidth}
+\epigraph{A man in daily muddy contact with field experiments could not be expected to have much faith in any direct assumption of independently distributed normal errors.}{George Box}
+
+\section*{Luis's Questions}
+\begin{exercise}[Harvard vs. Yale]
+Harvard and Yale students are alike in many ways. In particular, we both love to study statistics. The equivalent courses to STAT 110 at Yale is STAT 106. Suppose we take a random sample of students from each course and ask for their final grades. Let group 1 consists of i.i.d $H_1, \cdots, X_m$ random variables, each representing the grade obtained by one student from STAT 100. Similarly, let group 2 consists of i.i.d $Y_1, \cdots Y_m$ random variables for Yale students. We wish to compare the distributions of these two groups, and in particular, we're interested in answering the question: which set of students typically have higher scores?\\
+
+One method of answering this questions is called the \textit{Wilcoxon rank sum test}. After $m+n$ observations are obtained, they are listed in in increasing order, and each is assigned a rank between 1 and m + n: the smallest has rank 1, the second smallest has rank 2, etc. Let $R_j$ be the rank of $H_j$ among all the observations for $1 \leq j \leq m$ (the ranking of the Harvard students!), and let $R = \sum_{j=1}^{m} R_j$ be the sum of the ranks for students taking STAT 100.
+Intuitively, a very large value of $R$ is evidence that Harvard students tend to have higher grades (and vice versa if $R$ is very small).
+
+\begin{enumerate}
+\item The \textit{null hypothesis} in this setting is that both Harvard and Yale students receive grades from the same distributions (ie, we're indistinguishable). Under this setting, what constitutes a ``large'' value of $R$? \\
+Hint: Intuitively, a value is large if it is larger than what we would expect to get.
+\item What is the variance of $R$?
+\item Now, let $p$ be the probability that the first Harvard student has a higher grade than the first Yale student. Without assuming that the grades for both groups have the same distributions, what constituted a large value? A small value?\\
+Hint: Write $R_j$ in terms of indicator r.v.s a Harvard student having a higher grade than the other students.
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+The problem comes down to calculating the expected value of $R$.
+\begin{enumerate}
+\item By symmetry, all orderings of the $m+n$ observations are equally likely. So $R_j$ is equally likely to be any of $1,2, \cdots, m+n$, which means:
+\begin{align*}
+E(R_j) &= \frac{1}{m+n} \sum_{i=1}^{m+n} i\\
+&= \frac{1}{m+n}\frac{(m+n)(m+n + 1)}{2}\\ &= \frac{m+n+1}{2}
+\end{align*}
+
+The by linearity, we have:
+$$
+E(R) = \frac{m(m+n+1)}{2}
+$$
+\item To calculate the variance, by independence, we calculate $\var(R_j)$.
+\begin{align*}
+\var{R_j} &= E(R_j^2) - E(R_j)^2
+\end{align*}
+We focus on the first term:
+\begin{align*}
+E(R_j^2) &= \frac{1}{m+n}\sum_{i=1}^{m+n} i^2 \\
+&= \frac{1}{m+n}\frac{(m+n)(m+n+1)(2m + 2n + 1)}{6} \\
+&= \frac{(m+n+1)(2m + 2n + 1)}{6}
+\end{align*}
+\item Following the hint, we can write:
+$$
+R_1 = 1 + \sum_{i \neq 1}^m I(X_1 > X_i) + \sum_{i=1}^n I(X_1 > Y_i)
+$$
+Then by linearity, symmetry, and the fundamental bridge:
+$$
+E(R_1) = 1 + \frac{m-1}(\frac{1}{2}) + np
+$$
+By symmetry again, $E(R_j) = E(R_1)$ for $1 \leq j \leq m$. So by linearity:
+$$
+E(R) = m + m(m-1)/2 + mnp
+$$
+For a sanity check, note that this agrees for $p = \frac{1}{2}$ from (a).
+\end{enumerate}
+\end{solution}
+
+\begin{exercise}[Proving Poisson]
+Consider a setting where a Poisson approximation should work well: let $A_1 ,\cdots , A_n$ be independent, rare events, with $n$ large and $p_j = P(A_j)$ small for all $j$. Let $X = I(A_1) + \cdots + I(A_n)$ count how many of the rare events occur, and let $\lambda = E(X)$. Using MGFs, give a mathematical proof for why the Poisson approximation is correct.
+Hint: Recall that for small $x$, $1 + x \approx e^x$ is an extremely good approximation.
+\end{exercise}
+
+\begin{solution}
+The indicator $I(A_j)$ is $\Bern(p_j)$, so its MGF is $p_je^t + 1-p_j$. Thus, the MGF of $X$ is:
+\begin{align*}
+M_X(t) &= \prod_{j=1}^n (p_je^t + 1 - p_j)\\
+&= \prod_{j=1}^n (1 + p_j(e^t - 1)) \\
+&\approx \prod_{j=1}^n e^{p_j(e^t - 1)} \\
+= e^{(e^t - 1)\sum_{j=1}^n p_j}
+\end{align*}
+The last few lines are done using the approximation in the hint and some simplifications. Then we recognize the last line as having the same shape as the MGF of a Poisson r.v:
+$$
+M_{\text{Pois}}(t) = e^{\lambda(e^t - 1)}
+$$
+Where we have the rate parameter:
+\begin{align*}
+\lambda &= \sum_{j=1}^n p_j \\
+&= \sum_{j=1}^n E[I(A_j)] \\
+&= E[\sum_{j=1}^{n} I_(A_j)] \\
+&= E(X)
+\end{align*}
+which fits perfectly with the idea behind a Poisson approximations.
+\end{solution}
+
+
+\begin{exercise}[Machine Learning]
+OpenAI (a venture by Elon Musk, known for Tesla, and Sam Altman, known for Y-Combinator) is dedicated to open sourcing artificial intelligence research. It is a n attempt to democratize the coming AI revolution.\\
+
+Suppose you're a researcher working at OpenAI and have recently developed a novel algorithm. The algorithm predicts a simple statistics: the probability that a given stock $i$ will be at a higher price 1hr from now. You wish to compare the results to a very simple \textit{baseline} to demonstrate that your algorithm has more predictive power. Your baseline consists of making a probability prediction which is uniformly random: $p_i \sim \Unif(0,1)$ for all stocks $i$, where $p_i$ is the probability you assign to the stock rising. Each prediction is independent. \\
+
+A common tactic for simplifying the calculation is taking the negative log-likelihood. Let $Y = U_1U_2\cdots U_n$. What is the PDF of $Y$.
+
+\end{exercise}
+\begin{solution}
+Note that $-\log(Y) = -\log(U_1) - \log(U_2) - \cdots - \log(U_n)$. So we focus first on calculating the PDF of a single $X_i = -\log(U_1)$.
+
+Letting $x = -\log(u)$, so that $u = e^{-x}$, by the change of variables formula, the PDF of each $X_i$ is:
+\begin{align*}
+f_{X_i}(x) &= f_{U_i}(u) \left| \frac{du}{dx} \right|  \\
+&= e^{-x}
+\end{align*}
+for $x > 0$. So $X_i$ is Exponential with rate parameter $\lambda = 1$. Then we have that:
+$$
+-\log(Y) = X_1 + \cdots X_n
+$$
+So by the connection between the Gamma and Exponential, $X = -\log(Y) \sim Gamma(n,1)$. Then by change of variables formula, we can calculate the PDF of $Y$ as, letting $y = e^{-x}$ so that $x = -\log y$:
+\begin{align*}
+f_Y(y) &= f_X(x)|\frac{dx}{dy}| = \frac{1}{\Gamma(a)}x^ae^{-x}\frac{1}{x}\frac{1}{y} \\
+\frac{1}{\Gamma(a)}(- \log y)^{a-1}
+\end{align*}
+for $0 < y < 1$. Just plug everything in!
+\end{solution}
+
+\begin{exercise}[Going in Circles]
+A random point is chosen uniformly in the unit dist $\{(x,y) : x^2 + y^2 \leq 1\}$. Let $R$ be its distance from the origin.
+\begin{enumerate}
+\item What is the expected distance from the origin.
+\item Find the CDFs of $R^2$ and $R$ without using calculus, then use the results to find the PDFs. Then calculate the $E(R)$ in two more ways: using the definition of expectations, and using a 1D LOTUS by thinking of $R$ as a function of $R^2$.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+\begin{enumerate}
+\item Directly using 2D LOTUS:
+$$
+E(R) = \frac{1}{\pi}\int \int_D \sqrt{x^2 + y^2} dx dy
+$$
+where $D$ is the unit disk. Covering to polar coordinates, we have:
+$$
+E(R) = \frac{1}{\pi}\int_{0}^{2\pi}\int_{0}^1 r^2 dr d\theta = \frac{1}{\pi} \int_0^{2\pi} \frac{1}{3}d\theta = \frac{2}{3}
+$$
+\item Let $0 < a < 1$. Since the probability of random point being in $\{x^@ + y^2 \leq a^2\}$ is proportional to the area of the disk, we have:
+$$
+P(R \leq a) = P(R^2 \leq a^2) = \frac{\text{area of the disk with radius a}}{\text{area of the dist with radius 1}} = a^2
+$$
+So the CDFs are:
+$$
+P(R^2 \leq t) = t
+$$
+for $0 < t< 1$, and
+$$
+P(R \leq r) = r^2
+$$
+for $0 < r < q$. Then the PDF of $R^2$ is
+$$
+f_{R^2}(r) = 1
+$$
+and the PDF of $R$ is:
+$$
+f_R(r) = 2r
+$$
+both for $0 < r < 1$. Now we can get $E(R)$ in two more ways:
+$$
+E(R) = \int_0^1 r f_R(r) dr = \int_0^1 2r^2 dr = \frac{2}{3}
+$$
+by definition. Then letting $T = R^2$, we also have:
+$$
+E(R) = E(\sqrt{T}) = \int_0^1 \sqrt{t}f_T(t) dt = \int_0^1 t^{\frac{1}{2}} dt = \frac{2}{3}
+$$
+\end{enumerate}
+\end{solution}
+
+\begin{exercise}[Conditional Correlation]
+Show that if $E(Y|X) = c$ is constant, then $X$ and $Y$ are uncorrelated. However, show by example, that it is possible to have uncorrelated $X,Y$ such that $E(X|Y)$ is not constant. \\
+Hint: Use Adam's law to find $E(Y)$ and $E(XY)$.\\
+Hint2: Consider a non-linear r.v.s.
+\end{exercise}
+\begin{solution}
+Let $E(Y \mid X) = c$. By Adam's law and taking out what's known:
+$$
+E(Y) = E(E(Y\mid X)) = E(c) = c
+$$
+and similarly
+$$
+E(XY) = E(E(XY \mid X)) = E(X(E(Y\mid X)) = E(cX) = cE(X) = E(Y)E(X)
+$$
+so $X$ and $Y$ are uncorrelated.
+
+Letting $X \sim N(0,1)$ and $Y = X^2$. Then note that $X,Y$ are uncorrelated since
+$$
+\cov(X,Y) = E(XY) - E(X)E(Y) = E(X^3) - E(X)E(X^2) = 0
+$$
+But we have:
+$$
+E(Y \mid X) = E(X^2 \mid X) = X^2
+$$
+which is NOT constant.
+\end{solution}
+
+\pagebreak
+\section{Willy's Questions}
+\begin{exercise}[Assasins]
+You’re the game-master of a game of assassins and want to model the number of hours between kills in the game. What is a good distribution to model this?
+\end{exercise}
+
+\begin{solution}
+  Soln: $\Expo(\lambda)$
+\end{solution}
+
+\begin{exercise}[Assasins Continued]
+Now let’s say you want to estimate $\lambda$. We put a prior $\Gam(a,b)$ on $\lambda$. If $50$ people die in $100$ hours, what is the posterior distribution of $\lambda$?
+\end{exercise}
+\begin{solution}
+  \begin{verbatim}
+    Gamma: (b^a)/gamma(a) * lambda^(a-1) * e^(-b*lambda)
+  Expo: lambda e^(-lambda*x)
+
+  lambda ~ Gamma(a + 50, b+100).
+    \end{verbatim}
+\end{solution}
+
+\begin{exercise}[Chicken and Egg Story]
+The probability density of when a monkey will throw a banana is
+$$
+f(t)=\alpha e^{-\alpha(t)}
+$$
+Calculate the distribution of $(|T_1 - T_2|)$ if there are two identically distributed monkeys sitting in a tree (ie the difference between when they throw a banana). What is the mean, what is the variance?
+\end{exercise}
+\vspace{2in}
+
+\begin{exercise}[Rubbing Chickens]
+If you rub a chicken’s back, it lays eggs with waiting time between eggs exponential with a rate of $\lambda$. You have a blue chicken and a red chicken, and you need $2$ blue eggs and $4$ red eggs for an easter celebration. If you can only rub one chicken’s back at a time, what’s the distribution of total time you will have to wait to get your eggs?
+\end{exercise}
+\vspace{2in}
+
+\begin{exercise}[Chicken and Egg Continued]
+What is the distribution of the percentage of time you will have to wait on the blue chicken to lay its 2 eggs.
+\end{exercise}
+\vspace{2in}
+
+\begin{exercise}[The Normal Problem]
+\begin{enumerate}
+\item Let $z\sim \N(0,1)$. Use $\Phi(x)$ to represent $P(1 < z < 3)$.
+\item What is a good approximation of $P(1 < z < 3)$?
+\item  Now what about $P(1 < \Phi(Z) < 3)$
+\end{enumerate}
+\end{exercise}
+\vspace{2in}
+
+\section{Kevin's Questions}
+\begin{exercise}[Transitivity of Independence]
+Is independence transitive? i.e. Does  $X \indep Y$ and $Y \indep Z$ imply that  $X \indep Z$?
+\end{exercise}
+\vspace{2in}
+
+\begin{exercise}[Matching]
+Recall de Montmort’s matching problem: in a deck of $n$ cards labeled $1$ through $n$, a match occurs when the number on the card matches the card's position in the deck. Let $X$ be the number of matching cards. Does $X$ follow one of our named distributions? If so which one?
+Hint: What is the support of $X$?
+\end{exercise}
+\vspace{2in}
+
+\begin{exercise}[Let's Play A Game]
+A generous stranger offers you the the chance to play one of two games. In the first you roll a fair die and get paid the square of the  value. In the other game you roll two independent fair dice and get paid the product of the values you roll. Assuming you’re a rational consumer and want to maximize your expected winnings, which game should you play?
+\end{exercise}
+\vspace{2in}
+
+\begin{exercise}[Inefficient Allocation]
+There are $20$ students and $20$ gummy bears ($5$ of each color) at a Stat110 section. If there are $5$ students that like each color (such that in a ``perfect'' assignment, each student would get their favorite color), and the gummies are given out randomly to the students.  Let $X$ be the number of students who get the color gummy bear that they like. Find the mean and Variance of $X$.
+\end{exercise}
+\vspace{2in}
+
+\end{document}

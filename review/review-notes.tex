@@ -1,0 +1,327 @@
+\documentclass[11pt]{article}
+\usepackage{../stat110}
+\usepackage{graphicx}
+\usepackage{epigraph}
+\usepackage{hyperref}
+
+%\STAFF
+
+\begin{document}
+
+\SectionNotes{13}{Final Review Session}{Kevin Eskici, Luis Perez}{Willy Xiao, Aidi Zhang}
+
+\section*{General Topics}
+Check out the comprehensive review by Blitztein for more (\href{https://canvas.harvard.edu/courses/6017/files/folder/Handouts?preview=1509908}{here})
+
+\section*{Tricks of the Trade}
+\begin{description}
+\item[Simplest Non-trivial Example (SNoTE)] - Does the problem ask you to solve for all $n$, or for a very general case? Start with an easier example and work your way up.
+\item[Indicator Random Variables] - If you're trying to count something, break up what you're trying to count into one indicator random variable per item. For example, define an indicator $I_A$, which is 1 if event A occurs and 0 if event A does not occur.
+\item[Linearity of Expectation] - Expectation distributes! $E(aX + bY + c) = aE(X) + bE(Y) + c$, even if X and Y are dependent.
+\item[Symmetry] - If $X$ and $Y$ have the same distribution, then they have the same expected value, even if they are dependent.
+\end{description}
+\section*{Expected Value, Linearity, and Symmetry}
+\begin{description}
+\item[Expected Value] (aka \emph{mean}, \emph{expectation}, or \emph{average}) can be thought of as the ``weighted average" of the possible outcomes of our random variable. Mathematically, if $x_1, x_2, x_3, \dots$ are all of the possible values that $X$ can take, the expected value of $X$ can be calculated as follows:
+\begin{center}
+$E(X) = \sum\limits_{i}x_iP(X=x_i)$
+\end{center}
+Note that for \emph{any} $X$ and $Y$, $a$ and $b$ scaling coefficients and $c$ is our constant, the following property of \textbf{Linearity of Expectation} holds:
+
+\[E(aX + bY + c) = aE(X) + bE(Y) + c \]
+
+If two Random Variables have the same distribution, \emph{even when they are dependent} by the property of \textbf{Symmetry} their expected values are equal.
+
+
+
+\item[Conditional Expected Value] is calculated like expectation, only conditioned on any event A. \begin{center}
+$\ E(X | A) = \sum\limits_{x}xP(X=x | A)$
+\end{center}
+
+\end{description}
+
+\section*{Indicator Random Variables}
+\begin{description}
+\item[Indicator Random Variables] is random variable that takes on either 1 or 0. The indicator is always an indicator of some event. If the event occurs, the indicator is 1, otherwise it is 0. They are useful for many problems that involve counting and expected value.
+\item[Distribution] $I_A \sim \Bern(p)$ where $p = P(A)$
+\item[Fundamental Bridge] The expectation of an indicator for $A$ is the probability of the event. $E(I_A) = P(A)$. Notation:
+
+\[
+I_A =
+ \begin{cases}
+   1 & \text{A occurs} \\
+   0 & \text{A does not occur}
+  \end{cases}
+\]
+\end{description}
+
+\section*{Law of the Unconscious Statistician (LotUS)}
+\begin{description}
+\item[How do I find the expected value of a function of a random variable?]
+Normally, you would find the expected value of X this way:
+\[E(X) = \Sigma_x xP(X=x) \]
+\[E(X) = \int^\infty_{-\infty}xf(x)dx \]
+LotUS states that you can find the expected value of a \emph{function of a random variable} g(X) this way:
+\[E(g(X)) = \Sigma_x g(x)P(X=x) \]
+\[E(g(X)) = \int^\infty_{-\infty}g(x)f(x)dx \]
+\item[What's a function of a random variable?] A function of a random variable is also a random variable. For example, if $X$ is the number of bikes you see in an hour, then $g(X) =  2X$ could be the number of bike wheels you see in an hour. Both are random variables.
+\item[What's the point?] You don't need to know the PDF/PMF of $g(X)$ to find its expected value. All you need is the PDF/PMF of $X$.
+\end{description}
+
+
+\section*{Variance}
+\begin{description}
+\item[What is Variance?] Variance is the expected squared distance away from the mean. It is the square of the standard deviation.
+\[\var(X) = E((X - EX)^2) = E(X^2) - E(X) \]
+Oftentimes it's easier to calculate $E(X^2) - E(X)$ rather than $E(X - EX)$. You can find $E(X^2)$ with LotUS.
+
+The following is true for constants $a, b$:
+\[\var(aX + b) = a^2\var(X)\]
+The following is true \textbf{only if X and Y are independent}:
+\[\var(X + Y) = \var(X) + \var(Y)\]
+\end{description}
+
+section*{Can I Have a Moment?}
+\begin{description}
+\item[Moment] - Moments describe the shape of a distribution. The first three moments, are related to Mean, Variance, and Skewness of a distribution. The $k^{th}$ moment of a random variable $X$ is
+  \[\mu'_k = E(X^k)\]
+%\item[Moment about the mean] - The $k^{th}$ moment about the mean of a random variable $X$ is
+% \[ \mu_k = E[(X-\mu)^k] \]
+\item[What's a moment?] Note that
+  \begin{description}
+    \item[Mean] $\mu'_1 = E(X)$
+    \item[Variance] $\mu'_2 = E(X^2) = Var(X) + (\mu_1')^2$
+    %\item[Skewness] $\mu_3 = Skew(X)$
+  \end{description}
+  Mean, Variance, and other moments (Skewness) can be expressed in terms of the moments of a random variable!
+\end{description}
+
+\section*{Moment Generating Functions}
+
+\begin{description}
+  \item[MGF] For any random variable X, this expected value and function of dummy variable $t$;
+    \[ M_X(t) = E(e^{tX}) \]
+    is the \textbf{moment generating function (MGF)} of X if it exists for a finitely-sized interval centered around 0. Note that the MGF is just a function of a dummy variable $t$.
+  \item[Why is it called the Moment Generating Function?] Because the $k^{th}$ derivative of the moment generating function evaluated 0 is the $k^{th}$ moment of $X$!
+  \[\mu_k' = E(X^k) = M_X^{(k)}(0)\]
+  This is true by Taylor Expansion of $e^{tX}$
+  \[M_X(t) = E(e^{tX}) = \sum_{k=0}^\infty \frac{E(X^k)t^k}{k!} = \sum_{k=0}^\infty \frac{\mu_k't^k}{k!} \]
+  Or by differentiation under the integral sign and then plugging in $t=0$
+  \begin{align*}
+    M_X^{(k)}(t) &= \frac{d^k}{dt^k}E(e^{tX}) = E(\frac{d^k}{dt^k}e^{tX}) = E(X^ke^{tX}) \\
+    M_X^{(k)}(0) &= E(X^ke^{0X}) = E(X^k) = \mu_k'
+  \end{align*}
+
+  \item[MGF of linear combination of X.] If we have $Y = aX + c$, then
+    \[M_Y(t) = E(e^{t(aX + c)}) =  e^{ct}E(e^{(at)X}) = e^{ct}M_X(at)\]
+
+
+\item[Uniqueness of the MGF.] \emph{If it exists, the MGF uniquely defines the distribution}. This means that for any two random variables $X$ and $Y$, they are distributed the same (their CDFs/PDFs are equal) if and only if their MGF's are equal. You can't have different PDFs when you have two random variables that have the same MGF.
+  \item[Summing Independent R.V.s by Multiplying MGFs.] If $X$ and $Y$ are independent, then
+  \begin{align*}
+    M_{(X+Y)}(t) &= E(e^{t(X + Y)}) = E(e^{tX}e^{tY}) = E(e^{tX})E(e^{tY}) = M_X(t) \cdot M_Y(t) \\
+    M_{(X+Y)}(t) &= M_X(t) \cdot M_Y(t)
+  \end{align*}
+  The MGF of the sum of two random variables is the product of the MGFs of those two random variables.
+\end{description}
+
+\begin{description}
+\item[Multivariate Random Variables and Joint CDF/PMF/PDF.] Sometimes we have more than one random variable of interest, and we want to study probabilities associated with all of the random variables. Instead of studying the distributions of $X_1, X_2, X_3$ separately, we can study the distribution of the multivariate vector $\textbf{X} = (X_1, X_2, X_3)$. Joint PDFs and CDFs are analogous to multivariate versions of univariate PDFs and CDFs. Usually joint PDFs and PMFs carry more information than the marginal ones do, because they account for the interactions between the various random variables. If, however, the random variables are independent, then the joint PMF/PDF is just the product of the marginals and we get no extra information by studying them jointly rather than marginally.
+\end{description}
+
+\section*{Joint Distributions}
+Review: Joint Probability of events $A$ and $B$: $P(A \cap B)$
+
+\begin{table}[h]\begin{center}
+  \begin{tabular}{ccccc} \toprule
+    \textbf{Joint CDF} & ~ & \textbf{Joint PMF} & ~ & \textbf{Joint PDF} \\  \midrule
+    $F_{X, Y}(x, y) = P(X \leq x,Y \leq y)$ & ~ & $P(X=x, Y=y)$ & ~ & $f_{X,Y}(x,y) = \frac{\delta}{\delta x} \frac{\delta}{\delta y}F_{X, Y}(x, y)$ \\ \bottomrule
+  \end{tabular}\end{center}
+\end{table}
+
+Both the Joint PMF and Joint PDF must be non-negative and sum/integrate to 1. ($\sum_x \sum_y P(X=x, Y=y) = 1$) ($\int_x\int_y f_{X,Y}(x,y) = 1$). Like in the univariate cause, you sum/integrate the PMF/PDF to get the CDF.
+
+\section*{Multinomial (Multivariate Discrete)}
+
+  Review - Binomial is a simple case of multinomial.
+
+  Let us say that the vector $\vec{\textbf{X}} = (X_1, X_2, X_3, \dots, X_k) \sim \textnormal{Mult}_k(n, \vec{p})$  where $\vec{p} = (p_1, p_2, \dots, p_k)$.
+\begin{description}
+  \item[Story] - We have $n$ items, and then can fall into any one of the $k$ buckets independently with the probabilities $\vec{p} = (p_1, p_2, \dots, p_k)$.
+  \item[Example] - Let us assume that every year, 100 students in the Harry Potter Universe are randomly and independently sorted into one of four houses with equal probability. The number of people in each of the houses is distributed Mult$_4$(100, $\vec{p}$), where $\vec{p} = (.25, .25, .25, .25)$.
+    Note that $X_1 + X_2 + \dots + X_4 = 100$, and they are dependent.
+  \item[Multinomial Coefficient] The number of permutations of $n$ objects where you have $n_1, n_2, n_3 \dots, n_k$ of each of the different variants is the \textbf{multinomial coefficient}.
+    \[{n \choose n_1n_2\dots n_k} = \frac{n!}{n_1!n_2!\dots n_k!}\]
+  \item[Joint PMF] - For $n = n_1 + n_2 + \dots + n_k$
+    \[P(X_1 = n_1, X_2 = n_2, \dots, X_k = x_k) = {n \choose n_1n_2\dots n_k}p_1^{n_1}p_2^{n_2}\dots p_k^{n_k}\]
+  \item[Lumping] - If you lump together multiple categories in a multinomial, then it is still multinomial. A multinomial with two dimensions (success, failure) is a binomial distribution.
+  \item[Marginal PMF and Lumping]
+    \[X_i \sim \Bin(n, p_i)\]
+    \[X_i + X_j \sim \Bin(n, p_i + p_j)\]
+    \[X_i + X_j \sim \Bin(n, p_i + p_j)\]
+    \[X_1, X_2, X_3 \sim \Mult_3(n, (p_1, p_2, p_3)) \Longrightarrow X_1, X_2 + X_3 \sim \Mult_2(n, (p_1, p_2 + p_3))\]
+    \[X_1, X_2, \dots, X_{k-1} | X_k = n_k \sim \Mult_{k-1}\left(n - n_k, \left(\frac{p_1}{1 - p_k}, \frac{p_2}{1 - p_k}, \dots, \frac{p_{k-1}}{1 - p_k}\right)\right)\]
+\end{description}
+
+\section*{Multivariate Uniform (Multivariate Continuous)}
+
+Review - Uniform is a simple case of multivariate uniform. \\
+All you need to know is that probability is proportional to length/area/volume. More formally, probability is the length/area/volume of the region of interest divided by the total length/area/volume of the support. Every point in the support has equal density of value $\frac{1}{\textnormal{Total Area}}$.
+
+\section*{What are the Odds?}
+\begin{description}
+  \item[Prior Odds] of $A$ is the following odds ratio before you observe any data.
+    \[\frac{P(A)}{P(A^c)}\]
+  \item[Posterior Odds] of $A$ is the following odds ratio after you observe data (the outcome of any experiment, in this case the realized event $B$).
+    \[\frac{P(A|B)}{P(A^c|B)}\]
+  \item[Odds Form of Bayes' Rule]
+    \[\frac{P(A|B)}{P(A^c|B)} = \frac{P(B|A)}{P(B|A^c)}\frac{P(A)}{P(A^c)}\]
+
+\end{description}
+
+\section*{Covariance and Correlation (cont'd)}
+\begin{description}
+\item [Covariance] is the two-random-variable equivalent of Variance, defined by the following:
+  \[\cov(X, Y) = E[(X - E(X))(Y - E(Y))] = E(XY) - E(X)E(Y)\]
+  Note that
+  \[\cov(X, X) = E(XX) - E(X)E(X) =  E(X^2) - [E(X)]^2 = \var(X)\]
+\item [Correlation] is a rescaled variant of Covariance that is always between -1 and 1.
+  \[\corr(X, Y) = \frac{\cov(X, Y)}{\sqrt{\var(X)\var(Y)}} = \frac{\cov(X, Y)}{\sigma_X\sigma_Y}\]
+\item [Covariance and Indepedence] - If two random variables are independent, then they are uncorrelated. The inverse is not necessarily true.
+  \[X \indep Y \longrightarrow \cov(X, Y) = 0\]
+
+%, except in the case of Multivariate Normal, where uncorrelated \emph{does} imply independence.
+\item [Covariance and Variance] - Note that
+  \begin{align*}
+    \cov(X, X) &= \var(X) \\
+    \var(X + Y) &= \var(X) + \var(Y) + 2\cov(X, Y) \\
+    \var(X_1 + X_2 + \dots + X_n ) &= \sum_{i = 1}^{n}\var(X_i) + 2\sum_{i < j} \cov(X_i, X_j)
+  \end{align*}
+  In particular, if X and Y are independent then they have covariance 0 thus
+  \[X \indep Y \Longrightarrow \var(X + Y) = \var(X) + \var(Y)\]
+  In particular, If $X_1, X_2, \dots, X_n$ are i.i.d. and all of them have the same covariance relationship, then
+  \[\var(X_1 + X_2 + \dots + X_n ) = n\var(X_1) + 2{n \choose 2}\cov(X_1, X_2)\]
+
+\item [Covariance and Linearity] - For random variables $W, X, Y, Z$ and constants $b, c$:
+  \begin{align*}
+    \cov(X + b, Y + c) &= \cov(X, Y) \\
+    \cov(2X, 3Y) &= 6\cov(X, Y) \\
+    \cov(W + X, Y + Z) &= \cov(W, Y) + \cov(W, Z) + \cov(X, Y) + \cov(X, Z)
+  \end{align*}
+\item [Covariance and Invariance] - Correlation, Covariance, and Variance are addition-invariant, which means that adding a constant to the term(s) does not change the value. Let $b$ and $c$ be constants.
+  \begin{align*}
+    \var(X + c) &= \var(X) \\
+    \cov(X + b, Y + c) &= \cov(X, Y) \\
+    \corr(X + b, Y + c) &= \corr(X, Y)
+  \end{align*}
+  In addition to addition-invariance, Correlation is \emph{scale-invariant}, which means that multiplying the terms by any constant does not affect the value. Covariance and Variance are not scale-invariant.
+  \[\corr(2X, 3Y) = \frac{\cov(2X, 3Y)}{\sqrt{\var(2X)\var(3Y)}} = \frac{6\cov(X, Y)}{\sqrt{36\var(X)\var(Y)}} = \frac{\cov(X, Y)}{\sqrt{\var(X)\var(Y)}} = \corr(X, Y)\]
+\item[Intuitive Explanation of Covariance] - See \\
+\url{https://www.quora.com/Probability/What-is-an-intuitive-explanation-of-covariance}
+\end{description}
+
+
+\section*{Continuous Transformations}
+\begin{description}
+  \item[Why do we need the Jacobian?] We need the Jacobian to rescale our PDF so that it integrates to 1.
+  \item[One Variable Transformations] Let's say that we have a random variable $X$ with PDF $f_X(x)$, but we are also interested in some function of $X$. We call this function $Y = g(X)$. Note that $Y$ is a random variable as well. If $g$ is differentiable and one-to-one (every value of $X$ gets mapped to a unique value of $Y$), then the following is true:
+  \[f_Y(y) = f_X(x)\left|\frac{dx}{dy}\right| \textnormal{ or } f_Y(y) \left|\frac{dy}{dx}\right|= f_X(x)\]
+  To find $f_Y(y)$ as a function of $y$, plug in $x = g^{-1}(y)$.
+  \[f_Y(y) = f_X(g^{-1}(y))\left|\frac{d}{dy}g^{-1}(y)\right|\]
+  The derivative of the inverse transformation is referred to the \textbf{Jacobian}, denoted as $J$.
+  \[J = \frac{d}{dy}g^{-1}(y)\]
+  \item[Two Variable Transformations] Similarily, let's say we know the joint distribution of $U$ and $V$ but are also interested in the random vector $(X, Y)$ found by $(X, Y) = g(U, V)$. If $g$ is differentiable and one-to-one, then the following is true:
+  \[f_{X,Y}(x, y) = f_{U,V}(u,v) \left|\left| \frac{\delta(u, v)}{\delta(x, y)} \right|\right| = f_{U,V}(u,v)\left| \left|
+  \begin{array}{ccc}
+    \frac{\delta u}{\delta x} & \frac{\delta u}{\delta y} \\
+    \frac{\delta v}{\delta x} & \frac{\delta v}{\delta y}
+  \end{array}
+  \right| \right| \textnormal{ or } f_{X,Y}(x, y) \left|\left| \frac{\delta(x, y)}{\delta(u, v)} \right|\right| = f_{U,V}(u,v)
+  \]
+  The outer $||$ signs around our matrix tells us to take the absolute value. The inner $||$ signs tells us to the matrix's determinant. Thus the two pairs of $||$ signs tell us to take the absolute value of the determinant matrix of partial derivatives. In a 2x2 matrix,
+  \[ \left| \left|
+  \begin{array}{ccc}
+    a & b \\
+    c & d
+  \end{array}
+  \right| \right| = |ad - bc|\]
+  The determinant of the matrix of partial derivatives is referred to the \textbf{Jacobian}, denoted as $J$.
+  \[\left| \begin{array}{ccc}
+    \frac{\delta u}{\delta x} & \frac{\delta u}{\delta y} \\
+    \frac{\delta v}{\delta x} & \frac{\delta v}{\delta y}
+  \end{array}\right| = J\]
+
+\end{description}
+
+
+
+\section*{Variances/Covariances in a Multinomial}
+For $(X_1, X_2, \dots, X_k) \sim \Mult_k(n, (p_1, p_2, \dots, p_k))$, we have that marginally $X_i \sim \Bin(n, p_i)$ and hence $\var(X_i) = np_i(1-p_i)$. Also, for $i\neq j$, $\cov(X_i, X_j) = -np_ip_j$.
+
+\section*{Multivariate LotUS}
+Review: $E(g(X)) = \sum_xg(x)P(X=x)$, or $E(g(X)) = \int_{-\infty}^{\infty}g(x)f_X(x)dx$\\ \\
+For discrete random variables:
+\[E(g(X, Y)) = \sum_x\sum_yg(x, y)P(X=x, Y=y)\]
+For continuous random variables:
+\[E(g(X, Y)) = \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}g(x, y)f_{X,Y}(x, y)dxdy\]
+
+
+\section*{Law of Total Expectation}
+This is an extension of the \emph{Law of Total Probability}. For any set of events $B_1, B_2, B_3, ... B_n$ that partition the sample space (simplest case being $\{B, B^c\})$:
+  \[E(X) = E(XI_{B}) + E(XI_{B^c}) = E(X | B)P(B) + E(X | B^c)P(B^c)\] \[E(X) = \sum_{i=1}^{n} E(XI_{B_i}) = \sum_{i=1}^{n}E(X | B_i)P(B_i)\]
+
+
+\section*{Order Statistics}
+\begin{description}
+  \item[Definition] - Let's say you have $n$ i.i.d. random variables $X_1, X_2, X_3, \dots X_n$. If you arrange them from smallest to largest, the $i$th element in that list is the $i$th order statistic, denoted $X_{(i)}$. $X_{(1)}$ is the smallest out of the set of random variables, and $X_{(n)}$ is the largest.
+  \item[Properties] - The order statistics are dependent random variables. The smallest value in a set of random variables will always vary and itself has a distribution. For any value of $X_{(i)}$, $X_{(i+1)} \geq X_{(j)}$.
+  \item[Distribution] - Taking $n$ i.i.d. random variables $X_1, X_2, X_3, \dots X_n$ with CDF $F(x)$ and PDF $f(x)$, the CDF and PDF of $X_{(i)}$ are as follows:
+  \begin{align*}
+    F_{X_{(i)}}(x) = P (X_{(j)} \leq x) &=& \sum_{k=i}^n {n \choose k} F(x)^k(1 - F(x))^{n - k} \\
+    f_{X_{(i)}}(x) &=& n{n - 1 \choose i - 1}F(x)^{i-1}(1 - F(X))^{n-i}f(x)
+  \end{align*}
+  \item[Universality of the Uniform] - We can also express the distribution of the order statistics of $n$  i.i.d. random variables $X_1, X_2, X_3, \dots X_n$ in terms of the order statistics of $n$ uniforms. We have that
+  \[F(X_{(j)}) \sim U_{(j)}\]
+\end{description}
+
+\section*{Conditional Expectation}
+\begin{description}
+  \item[Conditioning on an Event] - We can find the expected value of $Y$ given that event $A$ or $X=x$ has occurred. This would be finding the values of $E(Y|A)$ and $E(Y|X = x)$. Note that conditioning in an event results in a $number$. Note the similarities between regularly finding expectation and finding the conditional expectation. The expected value of a dice roll given that it is prime is $\frac{1}{3}2 + \frac{1}{3}3 + \frac{1}{3}5 = 3\frac{1}{3}$. The expected amount of time that you have to wait until the shuttle comes (assuming that the waiting time is $\sim \Expo(\frac{1}{10})$) given that you have already waited $n$ minutes, is 10 more minutes by the memoryless property.
+    \begin{table}[htb!]
+       \centering
+      \begin{tabular}{ccc}
+      \toprule
+         ~& \textbf{Discrete Y} & \textbf{Continuous Y} \\
+      \midrule
+         Conditional & $E(Y|A) = \sum_y yP(Y=y|A)$ & $E(Y|A) = \int_{-\infty}^\infty yf(y|A)dy$ \\
+         ~ & $E(Y|X=x) = \sum_y yP(Y=y|X=x)$ & $E(Y|X=x) =\int_{-\infty}^\infty yf_{Y|X}(y|x)dy$ \\
+      \midrule
+      Regular & $E(Y) = \sum_y yP(Y=y)$ & $E(Y) =\int_{-\infty}^\infty yf_Y(y)dy$ \\
+
+      \bottomrule
+      \end{tabular}
+    \end{table}
+  \vspace{-.45 cm}
+  \item[Conditioning on a Random Variable] - We can also find the expected value of $Y$ given the random variable $X$. The resulting expectation, $E(Y|X)$ is \emph{not a number but a function of the random variable X}. For an easy way to find $E(Y|X)$, find $E(Y|X = x)$ and then plug in $X$ for all $x$. This changes the conditional expectation of $Y$ from a function of a number $x$, to a function of the random variable $X$.
+  \item[Properties of Conditioning on Random Variables] \quad
+  \begin{enumerate}
+    \item $E(Y|X) = E(Y)$ if $X \indep Y$
+    \item $E(h(X)|X) = h(X)$ (taking out what's known). \\
+      $E(h(X)W|X) = h(X)E(W|X)$
+    \item $E(E(Y|X)) = E(Y)$ (\textbf{Adam's Law}, aka Law of Iterated Expectation of Law of Total Expectation)
+  \end{enumerate}
+
+  \item[Law of Total Expectation] - For any set of events that partition the sample space, $A_1, A_2, \dots, A_n$ or just simply $A, A^c$, the following holds:
+  \begin{align*}
+    E(Y) &= E(Y|A)P(A) + E(Y|A^c)P(A^c) \\
+    E(Y) &= E(Y|A_1)P(A_1) + E(Y|A_2)P(A_2) + \dots + E(Y|A_n)P(A_n)
+  \end{align*}
+\end{description}
+\section*{Conditional Variance}
+\begin{description}
+  \item[Eve's Law] (aka Law of Total Variance) \quad
+  \[\var(Y) = E(\var(Y|X)) + \var(E(Y|X))\]
+\end{description}
+
+
+\end{document}

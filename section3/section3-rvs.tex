@@ -1,0 +1,298 @@
+\documentclass[11pt]{article}
+\usepackage{../stat110}
+\usepackage{graphicx}
+\usepackage{epigraph}
+\usepackage{comment}
+
+%\STAFF
+
+\begin{document}
+\SectionNotes{3}{Conditional Probability and Introduction to Random Variables}{Luis Perez (luisperez@college.harvard.edu)}{Aidi Zhang (aidizhang@college.harvard.edu)}
+
+\setlength{\epigraphwidth}{.6\textwidth}
+\epigraph{“Hard work increases the probability of serendipity.}{Ken Poirot}
+
+\section*{Administrivia}
+We'll be covering some of the review material a little faster from now on. The main chunk of section will hopefully consists of working through different exercises that help develop intuition.
+
+The below review notes are courtesy of William Chen and Sebastian Chiu, with modifications.
+\section*{Conditioning is the Soul of Statistics}
+
+Law of Total Probability with extran condition and a partitioning ${\bf B}_0, {\bf B}_1, {\bf B}_2, {\bf B}_3, \dots, {\bf B}_n$, and applied to random variables ${\bf X}$, ${\bf Y}$.
+\begin{align*}
+P({\bf A} | {\bf C}) &= \sum_{i=0}^n P({\bf A} | {\bf B}_i, {\bf C})P({\bf B}_i| {\bf C}) \\
+P({\bf Y}=y | {\bf Z = z}) &= \sum_{k}P({\bf Y}=y|{\bf X}=k,  {\bf Z = z})P({\bf X}=k |  {\bf Z = z})
+   \end{align*}
+Bayes' Rule with Extra Conditioning (just add C!)
+\begin{align*}
+   P({\bf A}|{\bf B}) &= \frac{P({\bf A} \cap {\bf B})}{P({\bf B})} = \frac{P({\bf B}|{\bf A})P({\bf A})}{P({\bf B})} \\
+   P({\bf A}|{\bf B}, {\bf C}) &= \frac{P({\bf A} \cap {\bf B} | {\bf C})}{P({\bf B} | {\bf C})} = \frac{P({\bf B}|{\bf A}, {\bf C})P({\bf A} | {\bf C})}{P({\bf B} | {\bf C})}
+\end{align*}
+
+\section*{Random Variables are the Bread and Butter of Statistics}
+\begin{description}
+  \item[Formal Definition] - A random variable X is a \emph{function} mapping the sample space $S$ into the real line.
+  \item[Descriptive Definition] - A random variable takes on a numerical summary of an experiment. The randomness comes from the the randomness of what outcome occurs. Each outcome has a certain probability. A discrete random variable may only take on a finite (or countably infinite) number of values. Random variables are often denoted by capital letters, usually $X$ and $Y$.
+  %\item[Events] - An event is a set of outcomes of an experiment. These events are usually denoted by capital letters, oftentimes ${\bf A}$ or ${\bf B}$. The event ``occurs" if any of the outcomes in the event are reached
+  \item[Example] - Let's have $X$ take on the number from a dice roll. So $\textbf{X=1}$ (this is an event) with probability $1/6$ and $\textbf{X=2}$ (this is also an event) with probability $1/6$ and so on. In this case, $X$ is our \emph{discrete random variable} and  $X=1$, $X=2$, and so on are our \emph{events}. In notational form, we can write $P(X=1) = 1/6$, which means that the probability that $X$ takes on the value of $1$ is $1/6$. Here is the \textbf{distribution} of $X$:
+
+\[
+X =
+ \begin{cases}
+   1 & \text{with probability }\frac{1}{6} \\
+   2 & \text{with probability }\frac{1}{6} \\
+... \\
+   6 & \text{with probability }\frac{1}{6}
+  \end{cases}
+\]
+
+  \item[Random Variables Expressing Events] - Let's say that $X$ is the random variable expressing the sum of two dice rolls. $\{X = 7\}$ is the event that your dice summed to 7, and $\{X \leq 7\}$ is the event that your dice summed to at most 7. $\{X = 2, X = 3, X = 5, X = 7, X = 11\}$ is also an event (the event that $X$ is prime), and so is $\{X = 2, X=9\}$.
+
+If we wanted to look at the event \emph{The outcome of a dice roll is even}, we would look at the set $\{$$X=2$, $X=4$, $X=6$$\}$. \emph{This set is also an an event}. If we roll a dice and its outcome is 2 (or 4, or 6), then our event has occurred.
+
+Let's say you now roll 2 die. What are some possible definitions of a random variable $X$ over this experiment? What are their sample spaces? Think about the probability of the r.v. achieving each value in the sample space.
+
+For example, we can let $X$ be the tuple (roll 1, roll 2). \\
+The sample space is $S = \{(1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (2, 1), \dots, (6, 5), (6, 6)\}$ (for a total of 36 possible outcomes, or 21 if order doesn't matter).
+
+\begin{solution}
+  \item[Here are a few:]
+  \begin{itemize}
+    \item X = Sum of two dice rolls (maps sample space to $\{2, 3, \dots, 12\}$)
+    \item X = Maximum of two dice rolls (maps sample space to $\{1, 2, \dots, 6\}$)
+    \item X = Absolute Difference of dice rolls (maps sample space to $\{0, 1, \dots, 5\}$)
+    \item X = Product of dice rolls (maps sample space to $\{1, 2, 3, 4, 5, 6, 8, 9, \dots, 36\}$)
+    \item X = Number of dice rolls that are prime (maps sample space to $\{0, 1, 2\}$)
+    \item X = Number of dice you rolled (maps sample space to $\{2\}$) This r.v. is degenerate as there is no randomness.
+    \item X = Twice the square of the maximum of your two dice rolls (maps sample space to $\{2, 8, \dots, 72\}$). Functions of random variables are also random variables.
+  \end{itemize}
+
+\end{solution}
+\section*{PMF, CDF, and Independence}
+\begin{description}
+
+\item[Probability Mass Function (PMF)] (Discrete Only) gives the probability that a random variable takes on the value $x \in \sigma{X}$.
+\begin{center}
+$P_X(x) = P(X=x)$
+\end{center}
+
+
+\item[Cumulative Distribution Function (CDF)] gives the probability that a random variable takes on the value x or less
+\[F_X(x_0) = P(X \leq x)\]
+
+\item[Independence] - Intuitively, two random variables are independent if knowing one gives you no information about the other. Formally, X and Y are independent if for $\forall x \in \sigma(X)$ and $\forall y \in \sigma(Y)$:
+\begin{center}
+$P(X=x, Y=y) = P(X = x)P(Y = y)$
+\end{center}
+
+\end{description}
+
+\section*{Simpson's Paradox}
+\textbf{Simpson's Paradox} says that X can be more successful than Y when compared within every group (Surgery Types, etc.), but still Y can be more successful than X when compared in the aggregate.
+\begin{align*}
+  P(A|B, C) < P(A|B^c, C) \hskip 1cm \textnormal{and}  \hskip 1cm P(A|B, C^c) < P(A|B^c, C^c)  \hskip 1cm \textnormal{but} \hskip 1cm P(A|B) > P(A|B^c)
+\end{align*}
+where A is success, B is one of the things that you are comparing (e.g. Doctors), and C is one of the groups (e.g. Surgery Types).
+
+\textbf{Example} For a concrete example, say we have two CS Concentrators, Luis and Aidi. and two types of problems to solve, coding problems and theory problems. Luis solves $\frac{89}{90}$ of the coding, while Aidi solves $\frac{10}{10}$ of the coding. Furthermore Luis solves $\frac{1}{10}$ of the theory problems, while Aidi solves $\frac{30}{90}$ of the theory problems.
+\begin{itemize}
+\item Overall, Luis solved $\frac{90}{100}$ of his problems and Aidi only solved $\frac{40}{100}$. Given this information, who do you collaborate with on your next assignment?
+\item How does this map to the above definition of Simpson's Paradox? What are A,B,C.
+\begin{solution}
+In this case, A is the probability of correctly solving a problem, B is event of partnering with Aidi, and C is event of getting a theory problemt. So the confounding variable C has led to this paradox.
+\end{solution}
+\end{itemize}
+
+\section*{Distributions}
+
+A distribution describes the probability that a random variable takes on certain values. We've already written an example of a distribution, and have in fact, already learned a bit about them. Now we introduce some helpful discrete distributions.
+
+\begin{description}
+\item[Bernoulli] The Bernoulli distribution is the simplest case of the Binomial distribution, where we only have one trial, or $n=1$. Let us say that X is distributed \Bern($p$). We know the following:
+\begin{description}
+  \item[Story.] $X$ ``succeeds" (is 1) with probability $p$, and $X$ ``fails" (is 0) with probability $1-p$.
+  \item[Example.] A fair coin flip is distributed \Bern($\frac{1}{2}$).
+  \item[PMF.] The probability mass function of a Bernoulli is:
+\[P(X = x) = p^x(1-p)^{1-x}\]
+or simply
+\[P(X = x) = \begin{cases} p, & x = 1 \\ 1-p, & x = 0 \end{cases}\]
+\end{description}
+
+\item[Binomial] Let us say that $X$ is distributed \Bin($n,p$). We know the following:
+\begin{description}
+  \item[Story] $X$ is the number of ``successes" that we will achieve in $n$ independent trials, where each trial can be either a success or a failure, each with the same probability $p$ of success.
+  \item[Example] If Jeremy Lin makes 10 free throws and each one independently has a $\frac{3}{4}$ chance of getting in, then the number of free throws he makes is distributed  \Bin($10,\frac{3}{4}$), or, letting X be the number of free throws that he makes, X is a Binomial Random Variable distributed  \Bin($10,\frac{3}{4}$).
+  \item[PMF] The probability mass function of a Binomial is:
+\[P(X = x) = {n  \choose x} p^x(1-p)^{n-x}\]
+\end{description}
+\end{description}
+
+
+\section*{Discrete Distributions}
+\begin{center}
+\renewcommand{\arraystretch}{3}
+\begin{tabular}{cccccc}
+\textbf{Distribution} & \textbf{Form} & \textbf{Support} & \textbf{PDF} & \textbf{Equivalent To}\\
+\hline
+Bernoulli & \Bern($p$) & $x \in \{0, 1\}$ &$\begin{cases} p, & x = 1 \\ 1-p, & x = 0 \end{cases}$ & $\Bin(1, p)$ \\
+Binomial & \Bin($n, p$) & $x \in \{0, 1, 2, \dots n \}$ & ${n \choose x}p^x(1-p)^{n-x}$ & Sum of Bernoullis \\
+\end{tabular}
+\end{center}
+
+\section*{Gambler's Ruin (group)}
+
+
+\textbf{Problem Statement} - Gamblers A and B have a series of bets, and they bet \$1 with each other until one of them is bankrupt. A starts with $\$i$ and B starts with $\$(N-i)$. $p$ is the probability that A wins a bet, and $q=1-p$ is the probability that B wins the bet. We wish to find $P_i$, which is the probability that A wins this game given that A starts with $\$i$. \\
+
+Write out an expression for $P_i$ in terms of the neighboring $P_?$:
+\begin{solution}
+We start off this problem by conditioning on the first step. If A wins the first bet, then the probability that A wins is $P_{i+1}$, and if A loses the first bet, then the probability that A wins is $P_{i-1}$. We know the boundary conditions are $P_0 = 0$ and $P_N = 1$. Thus we have the following recursive difference equation:
+
+\[P_i = pP_{i+1} + qP_{i-1}\]
+\end{solution}
+
+The result is what we call a difference equation.
+\section*{Solving Difference Equations}
+\begin{enumerate}
+  \item Guess $P_i = x^i$ to get the characteristic polynomial
+  \item Find the roots of the characteristic polynomial, $\alpha_1, \alpha_2, \dots, \alpha_k$
+  \item If the roots are distinct, the solution is of the form $P_i = c_1\alpha_1^i + c_2\alpha_2^i + \dots + c_k\alpha_k^i$. Plug in the boundary conditions to solve for $c_1, c_2, \dots, c_k$
+\end{enumerate}
+
+Following the outline, now find the roots of the characteristic polynomial using a reasonable guess. Let the two roots be $c_1,c_2$.
+\begin{solution}
+We start off the difference equation with the natural guess that $P_i = x^i$ (default difference equations guess that will usually work). We can now plug in $P_i = x^i$.
+
+\[0 = px^{i+1} - x^i + qx^{i-1}\]
+
+The Right Hand Side of this equation is known as the characteristic polynomial. Assuming that $x \neq 0$, we can cancel out $x^{i-1}$ and get:
+
+\[0 = px^2 - x + q\]
+
+The two roots of this polynomial are
+
+\begin{align*}
+\alpha_1 = \frac{1 + \sqrt{1 - 4p(1-p)}}{2p} \hskip 1cm & \hskip 1cm \alpha_2 =  \frac{1 - \sqrt{1 - 4p(1-p)}}{2p} \\
+\alpha_1 = 1 \hskip 1cm & \hskip 1cm \alpha_2 =  \frac{q}{p}
+\end{align*}
+\end{solution}
+
+Therefore, we know that our characteristic polynomial is of the form:
+
+\[P_i = c_1\alpha_1^i + c_2\alpha_2^i = c_11^i + c_2\left(\frac{q}{p}\right)^i\]
+
+The rest is good practice, but can get somewhat messy. We plug in $P_0 = 0$ and $P_N = 1$ to solve for $c_1$ and $c_2$, and we get the general answer (where $p\neq q$). The solution where (where $p = q$) is more technical and will not be covered in this class.\\
+
+$$
+P_i =
+\begin{cases}
+\frac{1 - \left(\frac{q}{p}\right)^i}{1 - \left(\frac{q}{p}\right)^N}, & \text{if }p \neq q \\
+\frac{i}{N}, & \text{if } p = q = \frac{1}{2}
+\end{cases}
+$$
+
+
+\pagebreak
+
+\end{description}
+
+\section*{Practice Problems}
+\section*{Favorite Card}
+Suppose you have a standard deck of cards (no magic this time!), and you also have a favorite number from within the set $\{1,2,\cdots,13\}$. Then you take the following steps:
+\begin{itemize}
+\item You shuffle the deck perfectly (ie, every ordering of the cards is equally likely) and place it face down.
+\item You take the top card from the deck and flip it to reveal it's value. Continue this step until the value of the card matches your favorite number (here, assume ace maps to $1$, jack to $11$, queen to $12$, and king to $13$ with the rest left as is).
+\item You take the next card and flip it to see its value.
+\end{itemize}
+The question we will focus on answer is the following. What is the probability that the ``next'' card has a value matching your favorite number?
+
+\begin{exercise}[Intuition]
+How does the probability of the above compare with the probability of (1) shuffling the deck and (2) randomly selecting a card that has a value equal to your favorite number?
+\end{exercise}
+\begin{solution}
+First,  note that the probability of randomly choosing a card with value equal to our favorite number is $\frac{1}{13}$ (four cards with that value, 52 total, all equally likely).
+
+Let $B$ be the event that the ``next'' card in the deck has a value equal to our favorite number (this is in reference to the processed described above).
+
+Intuitively, it may seem that $P (B) < 1/13$ since we know one of our favorite cards has been depleted from the deck and don't know anything about how many (if any) non-favorite were depleted.
+
+On the other hand, it clearly matters how many cards are needed to reach the first favorite card (in the extreme case where the first favorite card is at the 49th card, we know the next 3 cards are also our favorite). In that case, it's clear that $P(B) > \frac{1}{13}$.
+
+However, we are not given information about the number of cards needed to reach the first favorite card. Of course, we can condition on it, which brings us to the next two parts.
+\end{solution}
+
+
+\begin{exercise}[Sums Galore]
+Find an expression for the probability that the ``next'' card has a value equal to your favorite number. You don't need to simplify the expression.
+\end{exercise}
+\begin{solution}
+Let $C_j$ be the event that the first favorite card is at position $j$ in the deck. Then note that $P(C_j)$ is equivalent to the probability that all favorite cards are within positions $j$ through $52$ (we know none of the first $j-1$ are your favorite). Then consider calculating $P(B|C_j)$. Let $D_j$ be the event that the first $j-1$ cards aren't of your favorite value. Then by a second application of LOTP, $P(B|C_j) = P(B|C_j,D_j)P(D_j) + P(B|C_j,D_j^c)P(D_j^c)$. Note that $P(D_j) = \frac{{48 \choose j-1}}{{52 \choose j-1}}$ and $P(B|C_j,D_j) = \frac{4}{52-(j-1)}$ because we know all four of our cards are in the range $j \to 52$. Then be LOTP:
+\begin{align*}
+P(B) &= \sum_{j=1}^{49} P(B | C_j)P(C_j) \\
+&=\sum_{i=1}^{49} \frac{{48 \choose j-1}}{{52 \choose j - 1}} \cdot \frac{4}{52 - (j-1)}\cdot \frac{3}{52 - j}
+\end{align*}
+\end{solution}
+
+\begin{exercise}[Symmetry to the Rescue!]
+Using a symmetry argument, solve the above sum (no need for Wolfram!).
+Hint: If you were deciding whether to bet on the ``next'' card having your favorite value or betting on the last card in the deck having your favorite value, would you have a preference?
+\end{exercise}
+\begin{solution}
+At any stage of the game, all unrevealed cards are exchangeable. What this means is that asking whether the ``next'' card has our favorite value is the same as asking if the ``next next'' card has our favorite value and so one (nothing particularly special about the next one). So to simplify our problem, since we know the probabilities are equivalent, instead of asking whther the ``next'' card is valid, we can ask if the ``last'' card is valid. These two questions are the same, so P(B) is the same as the probability that the last card in the deck is valid. This is $\frac{1}{13}$.
+\end{solution}
+
+\section*{Judges}
+\begin{exercise}[Majority Rule]
+As is typical with the American judicial system, this problem begins with 12 jurors. However, due to unusual circumstances, the guilty/not guilty verdict is rendered by strict majority rule. What is the probability that the jury makes the correct final decision, given that each juror is independently correct with probability $p$? What if we instead have $n$ jurors?
+\end{exercise}
+\begin{solution}
+Let $X$ be a random variable indicating the number of jurors who correctly rendered a verdict. Let $C$ be the event that the verdict is rendered correctly. Then:
+\begin{align*}
+P(X \geq 7) &= \sum_{i=7}^{12}{12 \choose i}p^{i}(1-p)^i
+\end{align*}
+You can also notice that this is just a Bin$(12,p$) distribution.
+\end{solution}
+\begin{exercise}
+Suppose that you know that exactly $k$ jurors are in agreement for $k > \frac{n}{2}$ (so we're looking at the $k$ jurors whose verdict is the final verdict). What's the probability that the verdict rendered is actually correct? Try this with the $n=12$ and $k=7$. What about $n=11, k = 7$?
+\end{exercise}
+\begin{solution}
+Let $C$ be the event that the jury renders the correct verdict. Then we're trying to find $P(C|X = k)$ where $X$ is defined as above. By Bayes Rule:
+\begin{align*}
+P(C| X = k) &= \frac{P(X = k \cap C)}{P(X=k \cap C) + P(X = k \cap C^c)} \\
+&= \frac{{n \choose k}p^k(1-p)^{n-k}}{{n \choose k}p^k(1-p)^{n-k} + {n \choose n - k}(1-p)^kp^{n-k} }
+\end{align*}
+\end{solution}
+
+\begin{exercise}[Flippant Juror]
+Given the results from above, we decided to try something a little different. In this scenario, we now have only three jurors. The first two jurors are correct with probability $p$, and the last juror randomly renders a verdict. Again, majority rules apply. What's the probability that this jury renders the correct verdict?
+\end{exercise}
+\begin{solution}
+Two jurors correct = $p^2$, and the jury gives the correct verdict. \\
+Two jurors different $= p(1-p) + p(1-p) = 2p(1-p)$. In this situation, it is up to the third juror, who is correct half of the time. So $p(1-p)$ is the probability that the jury gives the correct verdict. These two events are disjoint, so summing, we have $p$ as the overall probability of the jury being correct.
+\end{solution}
+
+\begin{exercise}
+Roger is currently at the starting point of a marathon. The road extending infinitely in both directions. This is problematic, because Roger lost the email with the details of the race, so he isn't sure which way to go. He stands for a while, and watches four people pass by him. One is heading in the direction Roger is currently facing, and the other three are headed in the opposite direction. Using this information, Roger decides to take a step in each direction with probability equal to his current belief. Assume he never sees any other runners. What's the probability that after taking $n$ steps, he ends up back where he started?
+\end{exercise}
+\begin{solution}
+If $n$ is odd, the probability is $0$ (you can't get back to where you start in an odd number of steps).
+If $n$ is even, then we need to find the probability that he took exactly $\frac{n}{2}$ steps forward and $\frac{n}{2}$ steps backwards (in whatever order). This is given by ${n \choose n/2}\left(\frac{1}{4}\right)^{\frac{n}{2}}\left(\frac{3}{4} \right)^{\frac{n}{2}}$.
+\end{solution}
+
+\begin{exercise}
+We know the correct direction of the marathon is the direction the single person was running in. Suppose the finish line is $k$
+\end{exercise}
+\begin{solution}
+Let’s start by finding, for a fixed $k$, the probability that Roger ever reaches $k$ before ever reaching
+$−m$ where $m$ is a positive integer. Define the event $A_m$ to be that Jack reaches $k$ before $−m$. We
+know the probability $P(A_m)$ from the Gambler’s ruin problem with $p = 1/4$:
+\begin{align*}
+P(A_m) = \frac{1 - \left(\frac{q}{p} \right)^m}{1 - \left(\frac{q}{p} \right)^{m+k}} = \frac{1 - 3^m}{1-3^{m+k}}
+\end{align*}
+Note that $A_m \subseteq A_{m+1}$ for all $m$, and $\bigcup_{m=1}^{\infty} A_m$ corresponds to the event that Jack ever reaches $k$ (why?).
+
+How do we connect this result with the original question? What is the event of interest in terms
+of the $A_m$'s?
+\end{solution}
+
+\end{document}

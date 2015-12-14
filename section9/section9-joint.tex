@@ -1,0 +1,252 @@
+\documentclass[11pt]{article}
+\usepackage{../stat110}
+\usepackage{graphicx}
+\usepackage{epigraph}
+\usepackage{hyperref}
+
+%\STAFF
+
+\begin{document}
+\SectionNotes{8}{The Exponential Distribution and MGFs}{Luis Perez (luisperez@college.harvard.edu)}{Aidi Zhang (aidizhang@college.harvard.edu)}
+
+\setlength{\epigraphwidth}{.6\textwidth}
+\epigraph{“Statistics is the grammar of science.”}{Karl Pearson}
+
+\section*{Exponential Distribution (Continuous)}
+\begin{description}
+\item Let us say that $X$ is distributed $\Expo(\lambda)$. We know the following:
+\begin{description}
+  \item[Story] You're sitting on an open meadow right before the break of dawn, wishing that airplanes in the night sky were shooting stars, because you could really use a wish right now. You know that shooting stars come on average every 15 minutes, but it's never true that a shooting star is ever ''due'' to come because you've waited so long. Your waiting time is memorylessness, which means that the time until the next shooting star comes does not depend on how long you've waited already.
+
+  \item[Example] The waiting time until the next shooting star is distributed $\Expo(4)$. The 4 here is $\lambda$, or the rate parameter, or how many shooting stars we expect to see in a unit of time. The expected time until the next shooting star is $\frac{1}{\lambda}$, or $\frac{1}{4}$ of an hour. You can expect to wait 15 minutes until the next shooting star.
+
+  \item[All Exponentials are Scaled Versions of Each Other]
+    \[Y \sim \Expo(\lambda) \rightarrow X = \lambda Y \sim \Expo(1)\]
+
+  \item[PDF and CDF] The PDF and CDF of a Exponential is:
+\begin{eqnarray*}
+f(x) = \lambda e^{-\lambda x},
+\hspace{.1 in}
+x \in [0, \infty)
+\hspace{1 in}
+F(x) = P(X \leq x) = 1 - e^{-\lambda x},
+\hspace{.1 in}
+x \in [0, \infty)
+\end{eqnarray*}
+
+
+  \item[Memorylessness] The Exponential Distribution is the sole continuous memoryless distribution. This means that it's always ``as good as new'', which means that the probability of it failing in the next infinitesimal time period is the same as any infinitesimal time period. This means that for an exponentially distributed $X$ and any real numbers $t$ and $s$,
+  \[P(X > s + t | X > s) = P(X > t)\]
+  Given that you've waited already at least $s$ minutes, the probability of having to wait an additional $t$ minutes is the same as the probability that you have to wait more than $t$ minutes to begin with. Here's another formulation.
+  \[X - a | X > a \sim \Expo(\lambda)\]
+  Here are two consequences of the memoryless property.
+  \begin{enumerate}
+    \item If waiting for the bus is distributed exponentially with $\lambda = 6$, no matter how long you've waited so far, the expected additional waiting time until the bus arrives is always $\frac{1}{6}$, or 10 minutes. The distribution of time from now to the arrival is always the same, no matter how long you've waited.
+    \item The instantaneous failure rate $\left(\frac{f(x)}{1-F(x)}\right)$, or hazard function, is constant (see \url{http://en.wikipedia.org/wiki/Failure_rate} for more information, or try to think of the hazard function in terms of a conditional probability). That is, if the lifetime of a light bulb is distributed exponentially, the instantaneous rate of failure is always the same - the lightbulb will always have the same probability of failing in the next infinitesimal time unit for the duration of its lifetime. This is unlike real life light bulbs, whose failure rates grow as they grow older or my printer, which fails when I most need it.
+  \end{enumerate}
+
+\end{description}
+\end{description}
+
+\section*{Can I Have a Moment?}
+\begin{description}
+\item[Moment] - Moments describe the shape of a distribution. The first three moments, are related to Mean, Variance, and Skewness of a distribution. The $k^{th}$ moment of a random variable $X$ is
+  \[\mu'_k = E(X^k)\]
+%\item[Moment about the mean] - The $k^{th}$ moment about the mean of a random variable $X$ is
+% \[ \mu_k = E[(X-\mu)^k] \]
+\item[What's a moment?] Note that
+  \begin{description}
+    \item[Mean] $\mu'_1 = E(X)$
+    \item[Variance] $\mu'_2 = E(X^2) = Var(X) + (\mu_1')^2$
+    %\item[Skewness] $\mu_3 = Skew(X)$
+  \end{description}
+  Mean, Variance, and other moments (Skewness) can be expressed in terms of the moments of a random variable!
+\end{description}
+
+\section*{Moment Generating Functions}
+
+\begin{description}
+  \item[MGF] For any random variable X, this expected value and function of dummy variable $t$;
+    \[ M_X(t) = E(e^{tX}) \]
+    is the \textbf{moment generating function (MGF)} of X if it exists for a finitely-sized interval centered around 0. Note that the MGF is just a function of a dummy variable $t$.
+  \item[Why is it called the Moment Generating Function?] Because the $k^{th}$ derivative of the moment generating function evaluated 0 is the $k^{th}$ moment of $X$!
+  \[\mu_k' = E(X^k) = M_X^{(k)}(0)\]
+  This is true by Taylor Expansion of $e^{tX}$
+  \[M_X(t) = E(e^{tX}) = \sum_{k=0}^\infty \frac{E(X^k)t^k}{k!} = \sum_{k=0}^\infty \frac{\mu_k't^k}{k!} \]
+  Or by differentiation under the integral sign and then plugging in $t=0$
+  \begin{align*}
+    M_X^{(k)}(t) &= \frac{d^k}{dt^k}E(e^{tX}) = E(\frac{d^k}{dt^k}e^{tX}) = E(X^ke^{tX}) \\
+    M_X^{(k)}(0) &= E(X^ke^{0X}) = E(X^k) = \mu_k'
+  \end{align*}
+
+  \item[MGF of linear combination of X.] If we have $Y = aX + c$, then
+    \[M_Y(t) = E(e^{t(aX + c)}) =  e^{ct}E(e^{(at)X}) = e^{ct}M_X(at)\]
+
+
+  \item[Uniqueness of the MGF.] \emph{If it exists, the MGF uniquely defines the distribution}. This means that for any two random variables $X$ and $Y$, they are distributed the same (their CDFs/PDFs are equal) if and only if their MGF's are equal. You can't have different PDFs when you have two random variables that have the same MGF.
+  \item[Summing Independent R.V.s by Multiplying MGFs.] If $X$ and $Y$ are independent, then
+  \begin{align*}
+    M_{(X+Y)}(t) &= E(e^{t(X + Y)}) = E(e^{tX}e^{tY}) = E(e^{tX})E(e^{tY}) = M_X(t) \cdot M_Y(t) \\
+    M_{(X+Y)}(t) &= M_X(t) \cdot M_Y(t)
+  \end{align*}
+  The MGF of the sum of two random variables is the product of the MGFs of those two random variables.
+\end{description}
+
+\section*{Practice Problems}
+\begin{exercise}[Lifetime of Light Bulbs]
+There are two light bulbs in a box. The lifetime of the two light bulbs $X_1$ and $X_2$ are independent where $X_i \sim \Expo(\lambda_i)$. You use light bulb 1 (which has the lifetime of $X_1$) and you observe that it lasts through time $t$. Given this information, what is the probability it will last through an additional time $s$?
+\end{exercise}
+
+\begin{solution}
+By memorylessness property of the Exponential distribution, we have that:
+$$
+P(X_1 > t + s \mid X_1 > t) = P(X_1 > s) = e^{\lambda_1 s}
+$$
+\end{solution}
+
+\begin{exercise}
+Let's instead say you observe the light bulb to last through time $t$ but you no longer know which light bulb you are using! You do know, however, that you somehow selected light bulb 1 with probability $p_1$ and light bulb 2 with probability $p_2 (p_1 + p_2 = 1)$. Given this information, what is the probability that the light bulb you chose is light bulb 1?
+\end{exercise}
+
+
+\begin{solution}
+Let $X$ be the lifespan of the light-bulb we do choose? Using Bayes' Rule:
+\begin{align}
+P(\text{type i} \mid X > t) &= \frac{P(X > t \mid P(\text{type i})P(\text{type i})}{P(X > t \mid \text{type 1)}P(\text{type 1}) + P(X > t \mid \text{type 2})P(\text{type 2})}
+\end{align}
+\end{solution}
+
+\begin{exercise}
+Suppose you now have $n$ lightbulbs which each independently have a lifetime that is $\Expo(\lambda)$. You have a lamp that uses 2 light bulbs at any given time and you always use 2 functional light bulbs when using this lamp, replacing a dead light bulb with a new, fresh one. On average, how long will you be able to maintain having 2 functional light bulbs in this lamp using your $n$ light bulbs?
+\end{exercise}
+\begin{solution}
+For this question, we note that once we have only 1 light bulb left, the lamp can no longer have 2 functional light bulbs. Let T be the total operating time of the lamp and see that
+$$
+T = T_1 + ... + T_{n-1}
+$$
+where $T_i$ is the time between when our light bulbs die out.
+
+When we pair $2$ light bulbs at the same time, and the lifetime of each is independently $\Expo(\lambda)$, we have shown that the minimum of the lifetimes of the 2 light bulbs is distributed $\Expo(2\lambda)$.
+Therefore,
+$$
+E(T_i) = \frac{1}{2 \lambda}
+$$
+Note that once we replace a broken light bulb, by the memorylessness property, the light bulb that was already in the lamp but that didn't die out is good as new, so our reasoning works across all $n - 1$ light bulb deaths.
+
+Thus, since we experience $n - 1$ light bulb deaths, we have that $E(T) = \frac{n - 1}{2\lambda}$.
+\end{solution}
+
+\begin{exercise}[Memoryless Post Office]
+Aidi goes to a post office and sees two clerks serving customers. One clerk is serving Luis and other is serving Jiayi. No one else is here, so Aidi is at the front of the line and will be served by whichever clerk is free first. Let's say that the time it takes a clerk to serve one customer is $\Expo(1)$ and is independent of the time it takes to serve any other customer. What is the probability that Aidi will be the last one to be done being served?
+\end{exercise}
+
+\begin{solution}
+Note that since the distribution of service times are continuous, Luis and Jiayi cannot be served at
+the same time. One must finish first. When that occurs, Aidi moves in to fill the spot and begins
+service. Without loss of generality, let’s assume that Jjiayi is finished and Luis is in the service queue.
+
+Aidi’s waiting time is distributed Expo(1), and by the memoryless property Luis’s waiting time is
+distributed the same! The memoryless property of the Exponential distribution dictates that the time until service will always be distributed the same, no matter how far you are in the waiting process.
+
+Now since Aidi and Luis’s waiting times are both distributed Expo(1), by symmetry (and independent) Aidi and Luis' probability of being served last must be the exact same. Hence, Aidi’s probability of being served last is $\frac{1}{2}$.
+\end{solution}
+
+\begin{exercise}
+What is the expected amount of time that Aidi will spend at the post office?
+\end{exercise}
+
+\begin{solution}
+Aid will spend have to wait for either Aidi or Luis to finish being served, and then wait to be served herself. In the second case, the amount of time it takes to serve Aidi is distributed $T_2 \sim \Expo(1)$. In the first case, the claim is that the time Aidi waits is distribued $T_1 \sim \Expo(2)$.
+
+To show this, note that $T_1 = \min(A_1,A_2)$ where $A_1, A_2 \stackrel{i.i.d}{\sim} \Geom(1)$ represent the amount of time it takes to serve Luis and Jiayi respectively. Then to calculate the CDF of $T_1$:
+\begin{align*}
+P(T_1 \leq t) &= 1 - P(T_1 > t) \\
+&= 1 - P(A_1 > t \cap A_2 > t) \\
+&= 1 - P(A_1 > t)P(A_2 > t) \\
+&= 1 - (1 - P(A_1 \leq t))(1 - P(A_2 \leq t) \\
+&= 1 - e^{-\lambda_1t}e^{-\lambda_2t} \\
+&= 1 - e^{(-\lambda_1 + \lambda_2)t}
+\end{align*}
+The above is just the CDF of an $\Expo(\lambda_1 + \lambda_2)$ random variable. Therefore, we know that $T_1 \sim \Expo(\lambda_1 + \lambda_2)$ and has expected value of $\frac{1}{\lambda_1 + \lambda_2}$. Therefore, by linearity of expectations, we expect $E(T) = 1 + \frac{1}{2}$.
+\end{solution}
+
+\begin{exercise}
+Use MGFs to show that $\lambda Y \sim Expo(1)$ where $Y \sim Expo(\lambda)$. Assume it is known that the MGF of any $X \sim Expo(\lambda)$ is $M_X(t) = \frac{\lambda}{(\lambda - t)}$.
+
+\begin{solution}
+We can show the above by just calculating the MGF of $\lambda Y$ and showing that it is equivalent to the MGF of an $\Expo(1)$ r.v. By definition of the MGF, we have:
+
+\begin{align*}
+M_{\lambda Y}(t) &= E(e^{t\lambda Y}) \\
+&= E(e^{(t\lambda)Y}) \\
+&= M_{Y}(\lambda t) \\
+&= \frac{\lambda}{\lambda - \lambda t} \\
+&= \frac{1}{1 - t}
+\end{align*}
+The results is the MGF of an $\Expo(1)$ r.v, so we are done.
+\end{solution}
+\end{exercise}
+
+\begin{exercise}[B.H 6.17]
+Let $X_1, \cdots X_n$ be i.i.d with mean $\mu$ and variance $\sigma^2$, and MGF $M$. Let
+$$
+Z_n = \sqrt{n}\left(\frac{\bar{X}_n - \mu}{\sigma} \right)
+$$
+Show that $Z_n$ is standardized (ie, show it has mean $0$ and variance $1$). Next, find the MGF of $Z_n$ in terms of $M$, the MGF of each $X_j$.
+\end{exercise}
+
+\pagebreak
+
+\begin{solution}
+Taking the expected value, we have:
+
+\begin{align*}
+E[Z_n] &= E\left[ \sqrt{n}\left(\frac{\bar{X}_n - \mu}{\sigma} \right)  \right] \\
+&= \sqrt{n}\left(\frac{E(\bar{X}_n - \mu}{\sigma} \right) \\
+&= 0
+\end{align*}
+Note that the above is because we know that $E(\bar{X}_n) = \mu$.
+As for the variance, we can also do this relatively straight forwardly.
+
+\begin{align*}
+\text{Var}(Z_n) &= \text{Var}\left[\sqrt{n}\left(\frac{\bar{X}_n - \mu}{\sigma} \right)\right] \\
+&= \frac{n}{\sigma^2}\text{Var}(\bar{X}_n) \\
+&= 1
+\end{align*}
+
+For the last part, we just need to find the MGF of $Z_n$ in terms of the $X_i$. We have:
+\begin{align*}
+MGF_{Z_n}(t) &= E(e^{tZ_n}) \\
+&= E(e^{t\sqrt{n}\left(\frac{\bar{X}_n - \mu}{\sigma} \right)}) \\
+&= E(e^{-\frac{t\sqrt{n}\mu}{\sigma}}e^{\frac{t\sqrt{n}\bar{X}_n}{\sigma}}) \\
+&= e^{-\frac{t\sqrt{n}\mu}{\sigma}} E(e^{\left(\frac{t\sqrt{n}}{\sigma} \right)\bar{X}_n}) \\
+&=  e^{-\frac{t\sqrt{n}\mu}{\sigma}} E(e^{\left(\frac{t\sqrt{n}}{\sigma} \right)\frac{1}{n} \sum_{i}X_i})\\
+&= E(\prod_i e^{\left(\frac{t}{\sigma\sqrt{n}} \right)X_i})\\
+&= e^{-\frac{t\sqrt{n}\mu}{\sigma}}M(\frac{t}{\sigma\sqrt{n}})^n
+\end{align*}
+Where the last step was taken using the fact that each $X_i$ are independent.
+\end{solution}
+\pagebreak
+\begin{exercise}
+Use MGFs to determine whether $X + 2Y$ is Poisson if $X$ and $Y$ are i.i.d. $\Pois(\lambda)$.
+\end{exercise}
+
+\begin{solution}
+Let's first calculate the MGF of $T = X + 2Y$.
+\begin{align*}
+M_T(t) &= E(e^{tT}) \\
+&= E(e^{t(X + 2Y)} \\
+&= E(e^{tX})E(e^{(2t)Y}) \\
+&= e^{\lambda(e^t - 1)}e^{\lambda(e^{2t} - 1} \\
+&= e^{\lambda(e^t + e^{2t} - 2}
+\end{align*}
+The above is not the same as the MGF for a $\Pois(3\lambda)$ r.v.
+$$
+MGF_{\Pois(3\lambda)}(t) = e^{3\lambda(e^{t} - 1)}
+$$
+Note that if $X + 2Y$ were Poisson, it would have to be $\Pois(3\lambda)$ because $E(X + 2Y) = 3\lambda$.
+
+Another way to show that the above is not Poisson is to show that the variance and mean are not equal (in our case, the mean is $3\lambda$ and the variance is $5\lambda$.
+\end{solution}
+
+\end{document}

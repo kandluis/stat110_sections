@@ -1,0 +1,442 @@
+\documentclass[11pt]{article}
+\usepackage{../stat110}
+\usepackage{graphicx}
+\usepackage{epigraph}
+\usepackage{hyperref}
+
+%\STAFF
+
+\begin{document}
+\SectionNotes{6}{Midterm Review!!!}{Luis Perez (luisperez@college.harvard.edu)}{Aidi Zhang (aidizhang@college.harvard.edu)}
+
+\setlength{\epigraphwidth}{.6\textwidth}
+\epigraph{“Statistics is the grammar of science.”}{Karl Pearson}
+
+\section*{Administrivia}
+\begin{enumerate}
+\item Math Review by Blitzstein is helpful for brushing up on math concepts (anything from Taylor's series to binomial theorem to good old pattern recognition is fair game!)
+
+\item Good practice materials: past midterms/finals, section material (new and old), strategic practices, past homework as well as textbook problems.
+
+\item Don't forget your cheatsheet! A table of distributions would be given to you on top of your cheatsheet.
+
+\end{enumerate}
+
+\section*{Practice Problems}
+\begin{exercise}
+(Taken from 2014 midterm) You decide to enter a horse in a race. The number of other horses in the race, $N$, varies and can be any number from 1 to 9, each with equal probability (there are a total of 10 possible starting spots, and if no other horse are signed up, then the race is canceled). \\
+
+\begin{enumerate}
+\item Assume all the horses are all evenly matched; that means your horse has equal probability of finishing anywhere from the first position to the $(N+1)$th position. Overall, what is your horse's average (mean) finishing position?
+
+\item You decide to enter your horse in a second race. What is the probability that your horse finishes in the same position in both races? Do not simplify.
+
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\begin{enumerate}
+\item Let $X$ be the finishing spot for your horse, and let $N$ be the r.v. for the number of other horses in the race. Conditional on $N=n$, we know that $E(X|N=n) = \frac{n+2}{2}$. From linearity of expectations,
+
+$$E(X) = \frac{1}{9} (\frac{3}{2} + \frac{4}{2} + ... + \frac{11}{2}) = \frac{63}{18} = \frac{7}{2}$$
+
+\item The key is to try to determine the overall probability of finishing in each spot for the jth race, $j=1,2$. The only way to finish 10th spot is if first $N=9$ and your horse finishes last, with probability $P(X_j = 10) = P(X_j = 10|N=9)P(N=9) = \frac{1}{10} \cdot \frac{1}{9} = \frac{1}{90}$. The horse can finish in the 9th in two different ways: $P(X_j = 9|N=9)P(N=9) + P(X_j=9|N=8)P(N=8) = \frac{1}{10 \cdot 9} + \frac{1}{9 \cdot 9}$. Thus, overall,
+
+\begin{align*}
+P(X_1=X_2) &= \sum_{k=1}^{10} P(X_1 = k \cap X_2 = k) = (\frac{1}{9}(\frac{1}{2}+\frac{1}{3}+...+\frac{1}{10}))^2 \cdot 2 + (\frac{1}{9}(\frac{1}{3}+...+\frac{1}{10}))^2 + ... + (\frac{1}{9} \frac{1}{10})^2 \\
+&= \sum_{x=1}^{10} (\sum_{n=x-1}^9 \frac{1}{9} \frac{1}{n+1})^2 - \frac{1}{9^2}
+\end{align*}
+
+\end{enumerate}
+
+\end{solution}
+
+\begin{exercise}[Number Theory]
+It is a well known fact of number theory that:
+$$
+1^3 + 2 ^3 + \cdots + n^3 = (1 + 2 + \cdots + n)^2
+$$
+The identity is typically proven by induction, though that doesn't give much insight. In this problem, you'll be tasked with giving a story proof of this identity.
+\begin{enumerate}
+\item Give a story proof for the identity
+$$
+1 + 2 + \cdots + n = {n + 1 \choose 2}
+$$
+Hint: Consider a tournament where everyone plays against everyone else once.
+\item Gives a story proof for the identity:
+$$
+1^3 + 2^3 + \cdots + n^3 = 6{n + 1 \choose 4} + 6{n + 1 \choose 3} + {n + 1 \choose 2}
+$$
+The rest of the proof of the original statement just requires a few algebraic steps (not required for this problems).
+Hint: Imagine choosing a number between $1$ and $n$ and then choosing $3$ numbers between $0$ and $n$ smaller than the original number, with replacement. Then consider cases based on how many distinct numbers were chosen.
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\begin{enumerate}
+\item The LHS is counting the number of games played. The $n+1$ players plays $n$ games, the $n$-th players plays $n-1$ games (we don't want to double count the game between $n$ and $n+1$, and so on. Now the RHS simply counts this directly ($n+1$ players, $2$ per game, so a total of ${n+1 \choose 2}$ games.
+
+\item The LHS is simply counting as explained in the hint. We choose a tuple $(i,j,k,l)$ where $i$ is greater than the others. Once $i$ is chosen, there are exactly $i^3$ possible values for $j,k,l$. We sum over all possible values of $i$ from $1$ to $n$. For the RHS, there could be $2,3$ or $4$ distinct numbers in our tuple. For four distinct numbers, we have ${n+1 \choose 4}$, but the three smaller numbers could be permuted in any way, giving a factor of $6$. For $3$ distinct values, we have ${n + 1 \choose 3}$, where the smaller two values must be used to construct $j,k,l$. There are $6$ possible ways to do this (choose which values to repeat, and then choose whether the non-repeated value is first, second, or third). Finally, with only $2$ distinct values, there are exactly ${n+1 \choose 2}$ ways to form a tuple. This is RHS.
+\end{enumerate}
+\end{solution}
+
+\begin{exercise}
+You will show later that if $X \sim \N(\mu_1, \sigma_1^2)$ and $Y \sim \N(\mu_2, \sigma_2^2)$ are independent, then $X + Y \sim \N(\mu_1 + \mu_2, \sigma_1^2 + \sigma_2^2)$. Use this results to find $P(X < Y)$. Check that your answer makes sense in the special cases where $X,Y$ are i.i.d. You can leave your answers in terms of the standard normal CDF, $\Phi$.
+\end{exercise}
+
+\begin{solution}
+Simple, we just standardize $X - Y$ and plug that into the CDF of the normal. $X - Y = \sqrt{\sigma_1^2 + \sigma_2^2}Z + (\mu_1 - \mu_2)$ where $Z \sim \N(0,1)$. Then
+$$
+P(X < Y) = P(X - Y < 0) = P(\sqrt{\sigma_1^2 + \sigma_2^2}Z + (\mu_1 - \mu_2) < 0) = P(Z < \frac{-(\mu_1-\mu_2)}{\sqrt{\sigma_1^2 + \sigma_2^2}})
+$$
+which we can just plug into the CDF.
+\end{solution}
+
+\begin{exercise}
+In many problems about modeling count data, it is found that values of zero in the data are far more common than can be explained well using a Poisson model (we can make $P(X=0)$ large for $X \sim Pois(\lambda)$ by making $\lambda$ small, but that also constrains the mean and variance of $X$ to be small since both are $\lambda$). The Zero-Inflated Poisson distribution is a modification of the Poisson to address this issue, making it easier to handle frequent zero values gracefully.\\
+A zero-inflated Poisson r.v. $X$ with parameters $p$ and $\lambda$ can be generated as follows. First flip a coin with probability $p$ of Heads. Given the coin lands Heads, $X=0$. Given that the coin lands Tails, $X$ is distributed Pois($\lambda$). Note that if $X=0$ occurs, there are two possible explanations: the coin could have landed Heads (in which case the zero is a structural zero), or the coin could have landed Tails but the Poisson r.v. turned out to be that way.\\
+\begin{enumerate}
+\item Find the PMF of a Zero-Inflated Poisson r.v. $X$.
+
+\item Explain why $X$ has the same distribution as $(1-I)Y$, where $I \sim Bern(p)$ is independent of $Y \sim Pois(\lambda)$
+
+\item Find the mean of $X$ in two different ways: directly using the PMF of $X$, and using the representation from b). For the latter, you can use the fact that if r.v.s $Z$ and $W$ are independent, then $E(ZW) = E(Z)E(W)$.
+
+\item Find the variance of $X$.
+
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+\begin{enumerate}
+\item Solution is straight forward. The PMF is :
+\begin{align*}
+P(X = 0) &= p + (1-p)e^{-\lambda} \\
+P(X = k) &= (1-p)\frac{e^{-\lambda}\lambda^k}{k!}\textbf{}
+\end{align*}
+
+\item Consider the values of $I$ and how they affect $W = (1-I)Y$. Given that $I = 1$, we have $W = 0$. Given that $I = 0$, we have $W \sim \Pois(\lambda)$. This is exactly the process by which we generated the zero-inflated poison.
+\item The result using the above is just $(1-p)\lambda$. We just use the hint provided. Using the PMF directly
+\begin{align*}
+E(X) = \sum_{k=0}^{\infty} k P(X = k) = (1-p)\sum_{k=1}^{\infty} k\frac{e^{-\lambda}\lambda^k}{k!} = (1-p)\lambda
+\end{align*}
+\item Just need to calculate $E(X^2)$ which is $E((1-I)^2E(Y^2) = (1-p)(\lambda + \lambda^2)$. Then we use the variance formula, which gives $(1-p)(\lambda + \lambda^2) - (1-p)^2\lambda^2 = \lambda(1-p)(1 + \lambda p$.
+
+\end{enumerate}
+pg 105
+\end{solution}
+
+\begin{exercise}
+Let $U_1,U_2,...U_n$ be i.i.d. Unif(0,1) and $X = max(U_1,U_2,...Y_n)$. What is the PDF of $X$? What is $E(X)$?
+Hint: find the CDF first, by translating the event $X \le x $ into an event involving $U_1,...U_n$.
+\end{exercise}
+\begin{solution}
+Note that $X \le x$ holds if and only if all the $U_j$'s are at most $x$. So the CDF of $X$ is:
+
+$$P(X \le x) = P(U_1 \le x, ..., Y_n \le x) = (P(U_i \le x)^n) = x^n$$
+
+for $0 < x < 1$. So the PDF of $X$ is
+
+$$f(x) = nx^{n-1}$$
+
+for $0 < x < 1$ (and 0 otherwise). Then
+
+$$E(X) = \int_{0}^1 x(nx^{n-1})dx = n \int_{0}^1 x^n dx = \frac{n}{n+1}$$
+
+Pg 141
+
+\end{solution}
+
+\begin{exercise}
+The Pareto distribution with parameter $a > 0$ has PDF $f(x) = \frac{a}{x^{a+1}}$ for $x \ge 1$ (and 0 otherwise). This distribution is often used in statistical modeling.
+
+\begin{enumerate}
+\item Find the CDF of a Pareto distribution with parameter $a$; check that it is a valid CDF.
+
+\item Suppose that for a simulation you want to run, you need to generate i.i.d. Pareto(a) r.v.s. You have a computer that knows how to generate i.i.d. Unif(0,1) r.v.s but does not know how to generate Pareto r.v.s. Show how to do this.
+\end{enumerate}
+\end{exercise}
+\begin{solution}
+\begin{enumerate}
+\item This is just math.
+\begin{align*}
+P(X \leq k) &= \int_{x=1}^{k} x \frac{a}{x^{a+1}} dx \\
+&= 1 - \frac{1}{k^a}
+\end{align*}
+\item Let $U \sim Unif(0,1)$. By the universality of the Uniform, $F^{-1}(U) \sim Pareto(a)$. The inverse of the CDF is
+
+$$F^{-1}(u) = \frac{1}{(1-u)^{1/a}}$$
+
+So,
+
+$$Y = \frac{1}{(1-U)^{1/a}} \sim Pareto(a)$$
+
+To check directly that $Y$ defined in this way is Pareto(a), we can find its CDF,
+
+$$P(Y \le y) = P(\frac{1}{y} \le (1-U)^{1/a}) = P(U \le 1 - \frac{1}{y^a}) = 1 - \frac{1}{y^a}$$
+
+for any $y \ge 1$ and $P(Y \le y) = 0$ for $y < 1$. Then if we have $n$ i.i.d. Unif(0,1) r.v.s, we can apply this transformation to each of them to obtain $n$ i.i.d. Pareto(a) r.v.s.
+
+\end{enumerate}
+
+
+\end{solution}
+
+\section*{Tricks of the Trade}
+\begin{description}
+\item[Simplest Non-trivial Example (SNoTE)] - Does the problem ask you to solve for all $n$, or for a very general case? Start with an easier example and work your way up.
+\item[Indicator Random Variables] - If you're trying to count something, break up what you're trying to count into one indicator random variable per item. For example, define an indicator $I_A$, which is 1 if event A occurs and 0 if event A does not occur.
+\item[Linearity of Expectation] - Expectation distributes! $E(aX + bY + c) = aE(X) + bE(Y) + c$, even if X and Y are dependent.
+\item[Symmetry] - If $X$ and $Y$ have the same distribution, then they have the same expected value, even if they are dependent.
+\end{description}
+
+\section*{Reviewing How to Count}
+\begin{description}
+\item[Naive Definition of Probability] - Let's say that we want to find the probability that event $A$ occurs, and that our sample space contains $N$ \emph{equally likely} outcomes. Then:
+\[P(A) = \frac{\textnormal{outcomes in A}}{N} \]
+\item[Multiplication Counting Principle] If we need to do $r$ number of things, and there are $n_i$ ways to do the $i^{th}$ thing, then there are $n_1n_2n_3 \dots n_r$ different ways of doing the $r$ things.
+
+\item[Sampling where order matters] The number of permutations of $r$ out of $n$ objects where order matters is
+\[_nP_r = \frac{n!}{(n-r)!} = n(n-1)(n-2) \dots (n-r+1)\]
+\item[Sampling where order does not matters] The number of ways to choose $r$ out of $n$ objects where order does not matter is
+\[_nC_r = {n \choose r} = \frac{n!}{r!(n-r)!} =  \frac{_nP_r}{r!} = \frac{n(n-1)(n-2) \dots (n-r+1)}{r!}\]
+${n \choose r}$ is called the Binomial coefficients.
+
+\end{description}
+
+\section*{Probability and Set Theory}
+\begin{description}
+  \item[Disjoint/Mutually Exclusive Events] If A and B are disjoint  $P(A \cap B) = 0$
+  \item[Complement Events] \[P(A \cap A^c) = 0\] \[P(A \cup A^c) = 1\]
+  \item[Independent Events] If and only if A and B are independent, $P(A \cap B) = P(A)P(B)$. An alternate definition (where you have to be careful that $P(B) \neq 0$) is if and only if A and B are independent, then $P(A|B) = P(A)$.
+  \item[Inclusion-Exclusion] \[P (A \cup B) = P(A) + P(B) - P(A \cap B)\] \[P (A \cup B \cup C) = P(A) + P(B) + P(C) - P(A \cap B) - P(A \cap C) - P(B \cap C) + P(A \cap B \cap C)\]
+  \item[Conditional Probability and Bayes' Rule] \[P (A | B) = \frac{P(A \cap B)}{P(B)} = \frac{P(B | A) P(A)}{P(B)}\]
+  \item[De Morgan's Laws] - Here we use $\bar{A}$ to denote the same thing as $A^c$. ``Break the Line, Change the Sign" \[\overline{A \cup B} \equiv \bar{A} \cap \bar{B}\] \[\overline{A \cap B} \equiv \bar{A} \cup \bar{B}\] \[\overline{A \cup B \cup C} \equiv \bar{A} \cap \bar{B} \cap \bar{C}\] \[\overline{A \cap B \cap C} \equiv \bar{A} \cup \bar{B} \cup \bar{C}\]
+  \item[Law of Total Probability] - For any set of events $B_1, B_2, B_3, ... B_n$ that partition the sample space (simplest case being $\{B, B^c\})$: \[P(A) = P(A \cap B) + P(A \cap B^c) = P(A | B)P(B) + P(A | B^c)P(B^c)\] \[P(A) = \sum_{i=1}^{n}P(A | B_i)P(B_i) =  \sum_{i=1}^{n} P(A \cap B_i)\]
+\end{description}
+
+\section*{Poisson Paradigm}
+\[Y = I_1 + I_2 + I_3 + \dots + I_n\]
+If the following 3 conditions hold,
+\begin{enumerate}\itemsep 0em
+  \item $n$ is large
+  \item $P(I_i = 1) = p_i$ small for all $i$
+  \item Events are independent or weakly dependent \\
+\end{enumerate}
+Then $Y$ is approximately distributed Poisson with $\lambda = E(Y)$
+
+\section*{Expectation and Variance}
+\begin{description}
+  \item[Expected Value] \[E(X) = \Sigma_x xP(X=x) \] \[E(X) = \int^\infty_{-\infty}xf(x)dx \]
+  \item[Expected Value with LotUS] \[E(g(X)) = \Sigma_x g(x)P(X=x) \] \[E(g(X)) = \int^\infty_{-\infty}g(x)f(x)dx \]
+  \item[Linearity of Expectation] \[E(aX + bY + c) = aE(X) + bE(Y) + c\]
+\item[What is Variance?] Variance is the expected squared distance away from the mean. It is the square of the standard deviation.
+\[\var(X) = E((X - EX)^2) = E(X^2) - [E(X)]^2 \]
+Oftentimes it's easier to calculate $E(X^2) - [E(X)]^2$ rather than $E((X - EX)^2)$. You can find $E(X^2)$ with LotUS.
+
+The following is true for constants $a, b$:
+\[\var(aX + b) = a^2\var(X)\]
+The following is true \textbf{only if X and Y are independent}:
+\[\var(X + Y) = \var(X) + \var(Y)\]
+\end{description}
+
+\section*{Indicator Random Variables}
+\begin{description}
+  \item[Fundamental Bridge]
+    $E(I_A) = P(I_A = 1) = P(A)$
+  \item[Powers of Indicators]
+    $I_A^k = I_A \textnormal{ for any positive k}$
+  \item[Products of Indicators]
+    $I_AI_B = I_{A \cap B}$
+\end{description}
+
+\section*{Law of the Unconscious Statistician (LotUS)}
+\begin{description}
+\item[How do I find the expected value of a function of a random variable?]
+Normally, you would find the expected value of X this way:
+\[E(X) = \Sigma_x xP(X=x) \]
+\[E(X) = \int^\infty_{-\infty}xf(x)dx \]
+LotUS states that you can find the expected value of a \emph{function of a random variable} g(X) this way:
+\[E(g(X)) = \Sigma_x g(x)P(X=x) \]
+\[E(g(X)) = \int^\infty_{-\infty}g(x)f(x)dx \]
+\item[What's a function of a random variable?] A function of a random variable is also a random variable. For example, if $X$ is the number of bikes you see in an hour, then $g(X) =  2X$ could be the number of bike wheels you see in an hour. Both are random variables.
+\item[What's the point?] You don't need to know the PDF/PMF of $g(X)$ to find its expected value. All you need is the PDF/PMF of $X$.
+\end{description}
+
+\pagebreak
+
+\section*{Universality of Uniform}
+\begin{description}
+  \item[Universality of Uniform] applies for \emph{both continuous and discrete} random variables. For continuous random variables $X$ and its CDF $F(x)$, the following holds true for $U \sim \Unif(0, 1)$ \[F(X) \sim U \hspace{2cm} X \sim F^{-1}(U)\]
+For discrete random variables $X$, the following holds.
+ \[X \sim F^{-1}(U)\]
+  \item[Proof] - We show that $F^{-1}(U)$ has the same distribution as $X$ by verifying that their CDFs are equal.
+    \[P(F^{-1}(U) \leq x) = P(U \leq F(x)) = F(x) = P(X \leq x)\]
+  \item [Continuous Example with the Exponential] - Let's say that random variable $X$ has a CDF $F(x) = 1 - e^{-\lambda x}$. This is the Exponential distribution and we will cover this in class later. Universality of the Uniform says that when we plug in $X$ into its own CDF, then we get a random variable that is Uniformly distributed.
+  \[F(X) = 1 - e^{-\lambda X} \sim U\]
+  We can solve for $X$ to express $X$ in terms of $U$.
+  \begin{align*}
+    1 - e^{-\lambda X} &\sim U \\
+    e^{-\lambda X} &\sim 1 - U \\
+    -\lambda X &\sim \ln(1 - U) \\
+    X &\sim -\frac{\ln(1 - U)}{\lambda} = F^{-1}(U)
+  \end{align*}
+  Note that by symmetry, $U \sim 1 - U$, so we can also express $X$ as the following:
+  \[X \sim -\frac{\ln(U)}{\lambda}\]
+  \item [Discrete Example with the Poisson] - Note that to find the CDF of the Poisson, we simply sum over the PMFs of the Poisson. Let us say that $X \sim \Pois(\lambda)$, and that $\lfloor x \rfloor$ is the floor function.
+  \begin{align*}
+    P(X \leq 2) &= P(X = 0) + P(X = 1) + P(X = 2) = e^{-\lambda} +  \lambda e^{-\lambda} + \frac{\lambda^2 e^{-\lambda}}{2!}\\
+    P(X \leq \pi) &= P(X = 0) + \dots + P(X = 3) = e^{-\lambda} +  \lambda e^{-\lambda} + \frac{\lambda^2 e^{-\lambda}}{2!} + \frac{\lambda^3 e^{-\lambda}}{3!}\\
+    P(X \leq x) &= \sum_{k=1}^{\lfloor x \rfloor} \frac{\lambda^k e^{-\lambda}}{k!}
+  \end{align*}
+  Note that $F(X) \sim U$ is not quite true in the discrete case since $F(X)$ will not give all values between $[0, 1]$. However, we can still \emph{generate values in the Poisson distribution by using the randomness from the Uniform distribution}. We use $X \sim F^{-1}(U)$.
+
+ \begin{displaymath}
+   F^{-1}(u) = \left\{
+     \begin{array}{ll}
+       0 & 0 \leq u \leq e^{-\lambda}\\
+       1 & e^{-\lambda} \leq u \leq e^{-\lambda} + \lambda e^{-\lambda} \\
+       2 & e^{-\lambda} + \lambda e^{-\lambda} \leq u \leq e^{-\lambda} +  \lambda e^{-\lambda} + \frac{\lambda^2 e^{-\lambda}}{2!}\\
+       \dots & ~
+     \end{array}
+   \right.
+\end{displaymath}
+
+We confirm that this random variable, $F^{-1}(U)$, is distributed the same as $X \sim \Pois(\lambda)$, by checking the PMF or CDF of $F^{-1}(U)$.
+
+\end{description}
+
+\pagebreak
+
+\section*{Discrete Distributions Cheatsheet}
+
+\begin{description}
+\item[Bernoulli] The Bernoulli distribution is the simplest case of the Binomial distribution, where we only have one trial, or $n=1$. Let us say that X is distributed \Bern($p$). We know the following:
+\begin{description}
+  \item[Story.] $X$ ``succeeds" (is 1) with probability $p$, and $X$ ``fails" (is 0) with probability $1-p$.
+  \item[Example.] A fair coin flip is distributed \Bern($\frac{1}{2}$).
+  \item[PMF.] The probability mass function of a Bernoulli is:
+\[P(X = x) = p^x(1-p)^{1-x}\]
+or simply
+\[P(X = x) = \begin{cases} p, & x = 1 \\ 1-p, & x = 0 \end{cases}\]
+\end{description}
+
+\item[Binomial] Let us say that $X$ is distributed \Bin($n,p$). We know the following:
+\begin{description}
+  \item[Story] $X$ is the number of `'successes" that we will achieve in $n$ independent trials, where each trial can be either a success or a failure, each with the same probability $p$ of success. We can also say that $X$ is a sum of multiple independent $Bern(p)$ random variables. Let $X \sim \Bin(n, p)$ and $X_j \sim \Bern(p)$, where all of the Bernoullis are independent. We can express the following:
+  \[X = X_1 + X_2 + X_3 + \dots + X_n\]
+  \item[Example] If Jeremy Lin makes 10 free throws and each one independently has a $\frac{3}{4}$ chance of getting in, then the number of free throws he makes is distributed  \Bin($10,\frac{3}{4}$), or, letting X be the number of free throws that he makes, X is a Binomial Random Variable distributed  \Bin($10,\frac{3}{4}$).
+  \item[PMF] The probability mass function of a Binomial is:
+\[P(X = x) = {n  \choose x} p^x(1-p)^{n-x}\]
+  \item[Binomial Coefficient] ${n  \choose k}$ is a function of $n$ and $k$ and is read \emph{n choose k}, and means out of $n$ possible indistinguishable objects, how many ways can I possibly choose $k$ of them? The formula for the binomial coefficient is:
+\[{n  \choose k} = \frac{n!}{k!(n-k)!}\]
+\end{description}
+
+
+\item[Geometric] Let us say that $X$ is distributed $\Geom(p)$. We know the following:
+\begin{description}
+  \item[Story] $X$ is the number of ``failures" that we will achieve before we achieve our first success. Our successes have probability $p$.
+  \item[Example] If each pokeball we throw has a $\frac{1}{10}$ probability to catch Mew, the number of failed pokeballs will be distributed $\Geom(\frac{1}{10})$.
+  \item[PMF] With $q = 1-p$, the probability mass function of a Geometric is:
+\[P(X = k) = q^kp\]
+\end{description}
+
+\item[Negative Binomial] Let us say that $X$ is distributed $\NBin(r, p)$. We know the following:
+\begin{description}
+  \item[Story] $X$ is the number of ``failures" that we will achieve before we achieve our $r$th success. Our successes have probability $p$.
+  \item[Example] Thundershock has 60\% accuracy and can faint a wild Raticate in 3 hits. The number of misses before Pikachu faints Raticate with Thundershock is distributed $\NBin(3, .6)$.
+  \item[PMF] With $q = 1-p$, the probability mass function of a Negative Binomial is:
+\[P(X = n) = {n+r - 1 \choose r -1}p^rq^n\]
+\end{description}
+
+\item[Hypergeometric] Let us say that $X$ is distributed $\Hypergeometric(w, b, n)$. We know the following:
+\begin{description}
+  \item[Story] In a population of $b$ undesired objects and $w$ desired objects, $X$ is the number of ``successes" we will have in a draw of $n$ objects, without replacement.
+  \item[Example] 1) Let's say that we have only $b$ Weedles (failure) and $w$ Pikachus (success) in Viridian Forest. We encounter $n$ of the Pokemon in the forest, and $X$ is the number of Pikachus in our encounters. 2) The number of aces that you draw in 5 cards (without replacement). 3) You have $w$ white balls and $b$ black balls, and you draw $n$ balls. $X$ is the number of white balls you will draw in your sample. 4) Elk Problem - You have $N$ elk, you capture $n$ of them, tag them, and release them. Then you recollect a new sample of size $m$. How many tagged elk are now in the new sample?
+  \item[PMF] The probability mass function of a Hypergeometric is:
+\[P(X = k) = \frac{{w \choose k}{b \choose n-k}}{{w + b \choose n}}\]
+\end{description}
+
+
+\item[Poisson] Let us say that $X$ is distributed $\Pois(\lambda)$. We know the following:
+\begin{description}
+  \item[Story] There are rare events (low probability events) that occur many different ways (high possibilities of occurences) at an average rate of $\lambda$ occurrences per unit space or time. The number of events that occur in that unit of space or time is $X$.
+
+  \item[Example] A certain busy intersection has an average of 2 accidents per month. Since an accident is a low probability event that can happen many different ways, the number of accidents in a month at that intersection is distributed $\Pois(2)$. The number of accidents that happen in two months at that intersection is distributed $\Pois(4)$
+
+  \item[PMF] The PMF of a Poisson is:
+\[P(X = k) = \frac{e^{-\lambda}\lambda^k}{k!}\]
+\end{description}
+\end{description}
+
+
+\section*{Binomial, Bernoulli, Neg. Binomial, Geometric, Hypergeometric}
+Use this table to see the differences between the Binomial, Bernoulli, Negative Binomial, Geometric, and Hypergeometric Distributions. All of them include drawing elements from a sample, the differences include the rule for how many you draw, and whether or not those draws are made with replacement. This table includes all of the discrete distributions that we have covered minus the Poisson.
+
+\begin{table}[htb!]
+    \begin{tabular}{ccc}
+  \toprule
+  ~ & \textbf{Draw With Replacement} & \textbf{Draw Without Replacement}  \\
+        ~ & (prob of success constant) & (prob success changes) \\
+  \midrule
+        \textbf{Fixed Number of Trials (n)} & Binomial & Hypergeometric \\
+        ~ & (Bernoulli - Special Case $n = 1$) & ~ \\
+        \textbf{Draw until $k$ successes} & Negative Binomial & Negative Hypergeometric \\
+        ~ & (Geometric - Special Case $k = 1$) & (Not required for Stat 110) \\ \bottomrule
+    \end{tabular}
+\end{table}
+
+
+\section*{Discrete Distributions}
+\begin{center}
+\renewcommand{\arraystretch}{3}
+\begin{tabular}{cccccc}
+\textbf{Distribution} & \textbf{PMF and Support} & \textbf{Expected Value}  & \textbf{Variance} & \textbf{Equivalent To}\\
+\hline
+\shortstack{Bernoulli \\ \Bern($p$)} & \shortstack{$P(X=1) = p$ \\$ P(X=0) = q$} & $p$ & $pq$ & $\Bin(1, p)$ \\
+\hline
+\shortstack{Binomial \\ \Bin($n, p$)} & \shortstack{$P(X=k) = {n \choose k}p^k(1-p)^{n-k}$  \\ $k \in \{0, 1, 2, \dots n\}$}& $np$ & $npq$ & Sum of $n$ Bern($p$) \\
+\hline
+\shortstack{Geometric \\ \Geom($p$)} & \shortstack{$P(X=k) = q^kp$  \\ $k \in \{$0, 1, 2, \dots $\}$}& $\frac{q}{p}$ & $\frac{q}{p^2}$ & \NBin($1, p$)\\
+\hline
+\shortstack{First Success \\ $\FS(p)$} & \shortstack{$P(X=k) = q^{k-1}p$  \\ $k \in \{$1, 2, 3, \dots $\}$}& $\frac{1}{p}$ & $\frac{q}{p^2}$ & \Geom(p) + 1\\
+\hline
+\shortstack{Negative Binomial \\ \NBin($r, p$)} & \shortstack{$P(X=n) = {n+r - 1 \choose r -1}p^rq^n$ \\ $n \in \{$0, 1, 2, \dots $\}$} & $r\frac{q}{p}$ & $r\frac{q}{p^2}$ &  Sum of $r$ Geom($p$)\\
+\hline
+\shortstack{Hypergeometric \\ \Hypergeometric($w, b, n$)} & \shortstack{$P(X=k) = \sfrac{{w \choose k}{b \choose n-k}}{{w + b \choose n}}$ \\ $k \in \{$0, 1, 2, \dots $\}$} & $n\frac{w}{b+w}$ &&  \\
+\hline
+\shortstack{Poisson \\ \Pois($\lambda$)} & \shortstack{$P(X=k) = \frac{e^{-\lambda}\lambda^k}{k!}$ \\ $k \in \{$0, 1, 2, \dots $\}$} & $\lambda$ & $\lambda$ &  \\
+
+\end{tabular}
+\end{center}
+
+\section*{Continuous Distributions}
+\begin{center}
+\renewcommand{\arraystretch}{3}
+\begin{tabular}{cccccc}
+\textbf{Distribution} & \textbf{PDF and Support} & \textbf{Expected Value}  & \textbf{Variance}  &\textbf{Equivalent To}\\
+\hline
+
+\shortstack{Uniform \\ \Unif($a, b$)} & \shortstack{$ f(x) = \frac{1}{b-a}, x \in [a, b] $ \\$ f(x) = 0, x \notin [a, b]$} & $\frac{a+b}{2}$ & $\frac{(b-a)^2}{12}$ & $F_X(X)$ \\
+\hline
+\shortstack{Normal \\ $\N(\mu, \sigma^2)$} & $f(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x - \mu)^2}{2 \sigma^2}}$ & $\mu$  & $\sigma^2$ & \\
+\hline
+
+\end{tabular}
+\end{center}
+
+\section*{Discrete versus Continuous}
+
+\begin{table}[htb!] \begin{center}
+    \begin{tabular}{ccc}
+  \toprule
+        ~ & \textbf{Discrete} & \textbf{Continuous} \\ \midrule
+        $P(X \leq x) = $  & $F(x)$ (CDF) & $F(x)$ (CDF) \\
+        To find probabilities, & Add over PMF P(X = x) & Integrate over PDF f(x) = F'(x) \\
+        $E(X) =$ & $\sum_x xP(X=x)$ & $\int_{-\infty}^{\infty}xf(x)dx$ \\
+        $E(g(X)) =$ & $\sum_x g(x)P(X=x)$ (LOTUS Discrete) & $\int_{-\infty}^{\infty} g(x)f(x)dx$ (LOTUS Continuous)
+    \end{tabular}\end{center}
+\end{table}
+
+\pagebreak
+
+\end{document}

@@ -1,0 +1,193 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Stat 110 Section Notes LaTeX style                                           %
+%   written by Luis Perez                                                      %
+%                                                                              %
+% Borrowed from CS 124 Section Notes LaTex style                               %
+%     written by Carl Jackson                                                  %
+%                                                                              %
+% Put this file in the same directory as your section notes. To use this style %
+% file, use the following basic template:                                      %
+%                                                                              %
+%     \documentclass[11pt]{article}                                            %
+%     \usepackage{stat110}                                                     %
+%                                                                              %
+%     \title{My Awesome Section Notes}                                         %
+%                                                                              %
+%     \begin{document}                                                         %
+%     \SectionNotes{1}{Awesome Title}{Author Cool}{author1@}{Author Algo}{algo@}%
+%                                                                              %
+%     % Your notes go here                                                     %
+%                                                                              %
+%     \end{document}                                                           %
+%                                                                              %
+%                                                                              %
+% This style file provides a few conveniences:                                 %
+%                                                                              %
+%   - 'exercise' is a theorem-like environment that Does The Right Thing (tm)  %
+%   - The 'solution' environment is meant for staff solutions. They will be    %
+%     printed in a very light gray box to make it easier to scan when you're   %
+%     holding section.                                                         %
+%   - Put \STAFF at the top of the document to make it a staff version (i.e.,  %
+%     solutions will be printed inline). If \STAFF is not included, a student  %
+%     version will be generated, which includes large chunks of whitespace     %
+%     where the solutions used to be                                           %
+%                                                                              %
+%    - The packages also provides the following commands
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Document author.
+\author{Luis A. Perez}
+
+% Commonly used packages.
+% TODO(luisperez): Remove redundancies, or non-common packages.
+\usepackage[letterpaper, margin=.75in, top=.9in]{geometry}
+\usepackage{amsmath, amssymb, amsthm, graphicx, color, framed, verbatim, algorithmic, enumerate}
+\usepackage{latexsym, marvosym}
+\usepackage{pifont}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage[bottom]{footmisc}
+\usepackage{pdfpages}
+\usepackage{wrapfig}
+\usepackage{enumerate}
+\usepackage{xfrac}
+\usepackage[parfill]{parskip}
+\usepackage[pdftex]{hyperref}
+
+% Theorem packages:
+% Available theorem envioronments (most are shortcuts for a new title):
+% --theorem
+% --proposition
+% --lemma
+% --definition
+% --remark
+% --noration
+% --example
+% --algorithm
+% --pencil
+% --biohazard
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{pencil}[theorem]{\noindent \ding{46}}
+\newtheorem{biohazard}[theorem]{\noindent \Biohazard}
+
+% Theorem styles. We do this so we can get an appropriate amount of space around
+% them and stuff
+\newtheoremstyle{space}{15pt}{15pt}{\it}{}{\bf}{.}{.5em}{}
+\newtheoremstyle{newline}{}{}{}{}{\bf}{.}{\newline}{}
+
+\theoremstyle{space}
+\newtheorem*{summary}{Summary}
+\newtheorem*{exercise}{Exercise}
+
+\theoremstyle{newline}
+\newtheorem*{solutionthm}{Solution}
+
+% We shade the background of the solution environment a light gray
+\definecolor{shadecolor}{rgb}{.9,.9,.9}
+
+% Give students a little space to write stuff
+\newcommand{\solutionspace}{\vspace{2in}}
+
+% Commonly used math/statistics symbols (most are self-explanatory)
+% --\Xbold for X \in {lambda, mu, theta, alpha, beta, gamma}
+% --\noin - no indent
+% --\logit
+% --\var
+% --\cov
+% --\corr
+% --\N - set of natural numbers
+% --\Bern - Bernoulli
+% --\Bin - Binomial
+% --\Gam - Gamma
+% --\Beta
+% --\Expo - Exponential
+% --\Pois - Poisson
+% --\Unif - Uniform
+\newcommand{\lambdabold}{\mbox{\boldmath$\lambda$}}
+\newcommand{\mubold}{\mbox{\boldmath$\mu$}}
+\newcommand{\thetabold}{\mbox{\boldmath$\theta$}}
+\newcommand{\alphabold}{\mbox{\boldmath$\alpha$}}
+\newcommand{\betabold}{\mbox{\boldmath$\beta$}}
+\newcommand{\gammabold}{\mbox{\boldmath$\gamma$}}
+\newcommand{\noin}{\noindent}
+\newcommand{\logit}{\textrm{logit}}
+\newcommand{\var}{\textrm{Var}}
+\newcommand{\cov}{\textrm{Cov}}
+\newcommand{\corr}{\textrm{Corr}}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\Bern}{\textrm{Bern}}
+\newcommand{\Bin}{\textrm{Bin}}
+\newcommand{\Beta}{\textrm{Beta}}
+\newcommand{\Gam}{\textrm{Gamma}}
+\newcommand{\Expo}{\textrm{Expo}}
+\newcommand{\Pois}{\textrm{Pois}}
+\newcommand{\Unif}{\textrm{Unif}}
+\newcommand{\Geom}{\textrm{Geom}}
+\newcommand{\NBin}{\textrm{NBin}}
+\newcommand{\Hypergeometric}{\textrm{Hyper}}
+\newcommand{\Mult}{\textrm{Mult}}
+\newcommand{\FS}{\textrm{FS}}
+
+% Ceiling and floor
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+
+% Staff?
+\newcommand{\STAFF}{
+  \ifx\ISSTAFF\undefined
+    \newcommand{\ISSTAFF}{true}
+  \fi
+}
+\AtBeginDocument{
+  % PDF metadata
+  \hypersetup{
+    pdftitle = {\@title},
+    pdfauthor = {\@author},
+    pdfcreator = % Nothing. hyperref dumps something dumb here by default
+  }
+
+  \ifx\ISSTAFF\undefined
+    % Student version of notes
+    \newenvironment{solution}{\comment}{\endcomment\solutionspace}
+  \else
+    % Staff version
+    \newenvironment{solution}{\shaded\solutionthm}{\endsolutionthm\endshaded}
+  \fi
+}
+
+% Titlebox command
+\DeclareSymbolFont{symbolsC}{U}{txsyc}{m}{n}
+\DeclareMathSymbol{\indep}{\mathrel}{symbolsC}{121}
+
+% Section notes command to create title.
+% Input is 5 parameters:
+% - Section Number
+% - Section Title
+% - Section Author 1
+% - Section Author 1 Email
+\newcommand{\SectionNotes}[4]{
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+    \hbox to 6.5in { {Statistics 110: Introduction to Probability}
+    \hfill Section \##1}
+    \vspace{4mm}
+    \hbox to 6.5in { {\large \hfill #2 \hfill} }
+    \vspace{2mm}
+    \hbox to 6.5in { {\it #3 \hfill #4} }
+    }
+  }
+  \end{center}
+  \vspace*{4mm}
+}

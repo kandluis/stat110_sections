@@ -1,0 +1,350 @@
+\documentclass[11pt]{article}
+\usepackage{../stat110}
+\usepackage{graphicx}
+\usepackage{epigraph}
+\usepackage{hyperref}
+
+%\STAFF
+
+
+\begin{document}
+
+\SectionNotes{10}{Beta, Gamma, Conditional Expectation, and Order Statistics}{Luis Perez (luisperez@college.harvard.edu)}{Aidi Zhang (aidizhang@college.harvard.edu)}
+
+
+\setlength{\epigraphwidth}{.6\textwidth}
+\epigraph{Statisticians, like artists, have the bad habit of falling in love with their models.}{George Box}
+
+\section*{Administrivia}
+Section notes modified from William and Sebastian.
+
+\section*{Gamma Distribution (Continuous)}
+\begin{description}
+\item Let us say that $X$ is distributed $\Gam(a, \lambda)$. We know the following:
+\begin{description}
+  \item[Story] You sit waiting for shooting stars, and you know that the waiting time for a star is distributed $\Expo(\lambda)$. You want to see ``$a$" shooting stars before you go home. $X$ is the total waiting time for the $a$th shooting star.
+  \item[Example]  You are at a bank, and there are 3 people ahead of you. The serving time for each person is distributed Exponentially with mean of 2 time units. The distribution of your waiting time until you begin service is $\Gam(3, \frac{1}{2})$
+  \item[PDF] The PDF of a Gamma is:
+\begin{eqnarray*}
+f(x) = \frac{1}{\Gamma(a)}(\lambda x)^ae^{-\lambda x}\frac{1}{x},
+\hspace{.1 in}
+x \in [0, \infty)
+\end{eqnarray*}
+  \item[Properties and Representations]
+  \vspace{-.4 cm}
+  \begin{eqnarray*}
+    E(X) = \frac{a}{\lambda} && Var(X) = \frac{a}{\lambda^2} \\
+    X \sim \Gam(a, \lambda), \hspace{.2 cm} Y \sim \Gam(b, \lambda), \hspace{.2 cm} X \indep Y \hspace{.2 cm} &\longrightarrow& \hspace{.5cm} X + Y \sim \Gam(a + b, \lambda), \hspace{.3cm} \frac{X}{X + Y} \indep X + Y \\
+    X \sim \Gam(a, \lambda) &\longrightarrow& X = X_1 + X_2 + ... X_a \textnormal{ for $X_i$ i.i.d. $\Expo(\lambda)$} \\
+    \Gam(1, \lambda) &\sim& \Expo(\lambda)
+  \end{eqnarray*}
+\end{description}
+\end{description}
+
+
+\section*{Beta Distribution (Continuous)}
+\begin{description}
+\item Let us say that $X$ is distributed $\Beta(a, b)$. We know the following:
+\begin{description}
+  \item[Story (Bank/Post-Office)] Let's say that your waiting time at the bank is distributed $X \sim \Gam(a, \lambda)$ and that your total waiting time at the post-office is distributed $Y \sim \Gam(b, \lambda)$. You visit both of them while doing errands. Your total waiting time at both is $X + Y \sim \Gam(a + b, \lambda)$ and the fraction of your time that you spend waiting at the Bank is $\frac{X}{X+Y} \sim \Beta(a, b)$. The fraction is not dependent on $\lambda$, and $\frac{X}{X+Y} \indep X + Y$.
+  \item[Example] You are tasked with finding Jules, Vernes, and Nemo in a friendly game of hide and seek. You look for them in order, and the time it takes to find one of them is distributed Exponentially with a mean of $\frac{1}{3}$ of a time unit. The time it takes to find both Jules and Vernes is $\Expo(3) + \Expo(3) \sim \Gam(2, 3)$. The time it takes to find Nemo is $\Expo(3) \sim \Gam(1, 3)$. Thus the proportion of the total hide-and-seek time that you spend finding Nemo is distributed $\Beta(1, 2)$ and is independent from the total time that you've spent playing the game.
+  \item[PDF] The PDF of a Beta is:
+    \begin{eqnarray*}
+    f(x) = \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}x^{a-1}(1-x)^{b-1},
+    \hspace{.1 in}
+    x \in (0, 1)
+    \end{eqnarray*}
+  \item[Properties and Representations]
+\end{description}
+\end{description}
+\vspace{-.4 cm}
+  \begin{eqnarray*}
+    E(X) &=& \frac{a}{a + b} \\
+    X \sim \Gam(a, \lambda), \hspace{.3cm} Y \sim \Gam(b, \lambda), \hspace{.3cm} X\indep Y \hspace{.3cm} &\longrightarrow& \hspace{.3cm} \frac{X}{X + Y} \sim \Beta(a, b), \hspace{.3cm} \frac{X}{X + Y} \indep X + Y \\
+    \Beta(1, 1) &\sim& \Unif(0, 1)
+  \end{eqnarray*}
+
+\section*{Notable Uses of the Beta Distribution}
+\begin{description}
+  \item[\dots as the Order Statistics of the Uniform] -  The smallest of three Uniforms is distributed $U_{(1)} \sim \Beta(1, 3)$. The middle of three Uniforms is distributed $U_{(2)} \sim \Beta(2, 2)$, and the largest $U_{(3)} \sim \Beta(3, 1)$. The distribution of the the $j^{th}$ order statistic of $n$ i.i.d Uniforms is:
+  \begin{align*}
+    U_{(j)} &\sim \Beta(j, n - j + 1) \\
+    f_{U_{(j)}}(u) &= \frac{n!}{(j-1)!(n-j)!}t^{j-1}(1-t)^{n-j}
+  \end{align*}
+
+
+  \item[\dots as the Conjugate Prior of the Binomial] - A prior is the distribution of a parameter before you observe any data ($f(x)$). A posterior is the distribution of a parameter after you observe data $y$ ($f(x|y)$). Beta is the \emph{conjugate} prior of the Binomial because if you have a Beta-distributed prior on $p$ (the parameter of the Binomial), then the posterior distribution on $p$ given observed data is also Beta-distributed. This means, that in a two-level model:
+  \begin{align*}
+    X|p &\sim \Bin(n, p) \\
+    p &\sim \Beta(a, b)
+  \end{align*}
+Then after observing the value $X = x$, we get a posterior distribution $p|(X=x) \sim \Beta(a + x, b + n - x)$
+\end{description}
+
+\section*{Order Statistics}
+\begin{description}
+  \item[Definition] - Let's say you have $n$ i.i.d. random variables $X_1, X_2, X_3, \dots X_n$. If you arrange them from smallest to largest, the $i$th element in that list is the $i$th order statistic, denoted $X_{(i)}$. $X_{(1)}$ is the smallest out of the set of random variables, and $X_{(n)}$ is the largest.
+  \item[Properties] - The order statistics are dependent random variables. The smallest value in a set of random variables will always vary and itself has a distribution. For any value of $X_{(i)}$, $X_{(i+1)} \geq X_{(j)}$.
+  \item[Distribution] - Taking $n$ i.i.d. random variables $X_1, X_2, X_3, \dots X_n$ with CDF $F(x)$ and PDF $f(x)$, the CDF and PDF of $X_{(i)}$ are as follows:
+  \begin{align*}
+    F_{X_{(i)}}(x) = P (X_{(j)} \leq x) &=& \sum_{k=i}^n {n \choose k} F(x)^k(1 - F(x))^{n - k} \\
+    f_{X_{(i)}}(x) &=& n{n - 1 \choose i - 1}F(x)^{i-1}(1 - F(X))^{n-i}f(x)
+  \end{align*}
+  \item[Universality of the Uniform] - We can also express the distribution of the order statistics of $n$  i.i.d. random variables $X_1, X_2, X_3, \dots X_n$ in terms of the order statistics of $n$ uniforms. We have that
+  \[F(X_{(j)}) \sim U_{(j)}\]
+\end{description}
+
+\section*{Conditional Expectation}
+\begin{description}
+  \item[Conditioning on an Event] - We can find the expected value of $Y$ given that event $A$ or $X=x$ has occurred. This would be finding the values of $E(Y|A)$ and $E(Y|X = x)$. Note that conditioning in an event results in a $number$.
+    \begin{table}[htb!]
+       \centering
+      \begin{tabular}{ccc}
+      \toprule
+         ~& \textbf{Discrete Y} & \textbf{Continuous Y} \\
+      \midrule
+         Conditional & $E(Y|A) = \sum_y yP(Y=y|A)$ & $E(Y|A) = \int_{-\infty}^\infty yf(y|A)dy$ \\
+         ~ & $E(Y|X=x) = \sum_y yP(Y=y|X=x)$ & $E(Y|X=x) =\int_{-\infty}^\infty yf_{Y|X}(y|x)dy$ \\
+      \midrule
+      Regular & $E(Y) = \sum_y yP(Y=y)$ & $E(Y) =\int_{-\infty}^\infty yf_Y(y)dy$ \\
+
+      \bottomrule
+      \end{tabular}
+    \end{table}
+  \vspace{-.45 cm}
+  \item[Conditioning on a Random Variable] - We can also find the expected value of $Y$ given the random variable $X$. The resulting expectation, $E(Y|X)$ is \emph{not a number but a function of the random variable X}. For an easy way to find $E(Y|X)$, find $E(Y|X = x)$ and then plug in $X$ for all $x$. This changes the conditional expectation of $Y$ from a function of a number $x$, to a function of the random variable $X$.
+  \item[Properties of Conditioning on Random Variables] \quad
+  \begin{enumerate}
+    \item $E(Y|X) = E(Y)$ if $X \indep Y$
+    \item $E(h(X)|X) = h(X)$ (taking out what's known). \\
+      $E(h(X)W|X) = h(X)E(W|X)$
+    \item $E(E(Y|X)) = E(Y)$ (\textbf{Adam's Law}, aka Law of Iterated Expectation of Law of Total Expectation)
+  \end{enumerate}
+
+  \item[Law of Total Expectation] - For any set of events that partition the sample space, $A_1, A_2, \dots, A_n$ or just simply $A, A^c$, the following holds:
+  \begin{align*}
+    E(Y) &= E(Y|A)P(A) + E(Y|A^c)P(A^c) \\
+    E(Y) &= E(Y|A_1)P(A_1) + E(Y|A_2)P(A_2) + \dots + E(Y|A_n)P(A_n)
+  \end{align*}
+\end{description}
+\section*{Conditional Variance}
+\begin{description}
+  \item[Eve's Law] (aka Law of Total Variance) \quad
+  \[\var(Y) = E(\var(Y|X)) + \var(E(Y|X))\]
+\end{description}
+\pagebreak
+
+
+\section*{Practice Problems}
+\begin{exercise}[Generalized Bank and Post Office]
+\begin{enumerate}
+\item Suppose that $X_1,...,X_{n+1} \sim \Expo(\lambda)$ i.i.d. Assume that $j < n + 1$ Find the distribution of
+
+\[T = \frac{X_1+...+X_j}{X_1+...+X_{n+1}}\]
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+We can do this problem by the Bank and Post Office story. First, let us define $G_1 = X_1 + \cdots + X_j$ and $G_2 = X_{j+1} + \cdots + X_{n+1}$ for some $j \in [1,\cdots n]$. The by the Bank Post Office analogy, we have $G_1 \sim \Gam(j,\lambda)$ and $G_2 \sim \Gam(n - j + 1, \lambda)$, which means that
+$$
+T = \frac{X_1+...+X_j}{X_1+...+X_{n+1}} = \frac{G_1}{G_1 + G_2} \sim \Beta(j, n-j+1)
+$$
+It also follows that $T \indep G_1 + G_2$.
+\end{solution}
+
+\begin{exercise} [Gamma story]
+\begin{enumerate}
+\item Let $X \sim Poisson(\lambda t)$ and $Y \sim Gamma(j,\lambda)$, where $j$ is a positive integer. Show that $P(X \ge j) = P(Y \le t)$.
+
+\item Show that
+$$\int_0^t \frac{1}{(j-1)!} (\lambda u)^j e^{-\lambda u} \frac{du}{u} = \sum_{k=j}^{\infty} \frac{e^{-\lambda t}(\lambda t)^k}{k!}$$
+
+without using calculus, for all $t \ge 0$, $j$ a positive integer.
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\begin{enumerate}
+\item Consider a Poisson processwith rate $\lambda$. Let $X = $ number of arrivals up to time $t$, and let $Y = $ waiting time for $j$ arrivals. Then $X \sim Pois(\lambda t)$ and $Y \sim Gamma(j,\lambda)$. The event $X \ge j$ in English means "at least j arrivals occur before time t". The event $Y \le t$ means "waiting time for jth arrival is less than or equal to t". These are the same event.
+
+\item The LHS is the integral of the $Gamma(j,\lambda)$ PDF from 0 to t, which is $P(Y \le t)$ where $Y \sim Gamma(j,\lambda)$. The RHS is the sum of $Pois(\lambda t)$ from j to $\infty$, which is $P(X \ge j)$ where $X \sim Pois(\lambda t)$. From part a), these are equal.
+\end{enumerate}
+\end{solution}
+
+\begin{exercise}[DNA Sequencing]
+Suppose I view a DNA sequence and want to find the proportion of base pairs in the sequence that are Adenosine (A). Let this proportion be denoted by $p$. From my research, I have a prior on $p$ given by $p \sim \Beta(a,b)$. Suppose I analyze more DNA sequences and find that out of $n$ base pairs, $k$ are Adenosine. Let $X$ be the above data.
+\begin{enumerate}[a)]
+  \item Find the PMF $P(X=k)$ unconditionally. You must simplify all integrals, but may leve your answer in terms of the $\Gamma$ function.
+  \item Find the conditional PDF of $p|(X=k)$ up to a scaling constant. What famous distribution does this follow and what are its parameters?
+  \item Find $E(p \mid X = k)$, and discuss how the parameters $a,b$ of our prior affect this value. What happens as the amount of data we collect increases?
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+This is a continuation of the Beta-Binomial conjugacy.
+\begin{enumerate}[a)]
+\item Find the PMF of $P(X = k)$ unconditionally! \\
+We can do this by integrating over the prior, $p$, as follows:
+\begin{align}
+P(X = k) &= \int_0^1 P(X = k \mid p)f(p) dp \\
+&= \int_0^1 {n \choose k} p^k(1-p)^{n-k} \frac{\Gamma(a+b) }{\Gamma(a)\Gamma(b)}p^{a - 1}(1-p)^{b-1} dp \\
+&= {n \choose k} \frac{\Gamma(a + b)}{\Gamma(a)\Gamma(b)} \int_{0}^1 p^{a+k - 1}(1-p)^{b + n -k - 1} dp \\
+&= {n \choose k} \frac{\Gamma(a + b)\Gamma(a+k)\Gamma(b+n-k)}{\Gamma(a)\Gamma(b)\Gamma(a + b + n)} \int_{0}^1  \frac{\Gamma(a + b + n)}{\Gamma(a+k)\Gamma(b+n-k)} p^{a+k - 1}(1-p)^{b + n -k - 1} dp \\
+&= {n \choose k} \frac{\Gamma(a + b)\Gamma(a+k)\Gamma(b+n-k)}{\Gamma(a)\Gamma(b)\Gamma(a + b + n)} \\
+\end{align}
+\item This is just reworking the Beta-Binomial Conjugacy. First note that:
+\begin{align*}
+f(p \mid X = k) &= \frac{P(X=k \mid p) f(p)}{P(X = k)} \\
+f(p \mid X = k) &\propto P(X=k \mid p) f(p) \\
+&\propto p^k(1-p)^{n-k}p^{a - 1}(1-p)^{b-1} \\
+&= p^{a + k -1}(1-p)^{n - k + b -1}
+\end{align*}
+By pattern matching, we see that $p \mid X = k \sim Beta(a + k, b + n - k)$.
+\item By properties of the Beta, which we can work out if the section decides they want to, we have that
+$$
+E(p \mid X = k) = \frac{a + k}{a + b + n}
+$$
+Note that the larger $a,b$ are, the more they influence this expected value. Otherwise, it is the data we see that influence the results the most.
+\end{enumerate}
+\end{solution}
+
+\begin{exercise}[Basketball Practice]
+A certain basketball player (we'll call him Jeremy Lin) practices shooting free throws over and over again. The shots are independent, with probability $p$ of success. Now suppose that the player keeps shooting until making 7 shots in a row for the first time. Let $X$ be the number of shots taken. Find $E(X)$.
+\end{exercise}
+
+\begin{solution}
+We make use of the conditional expectation. Note that for $i \in [1,\cdots, 8]$, we can write an event $A_i$ which represents the the fact that the first time the basketball player fails at a free throw occurs on the $i$-th throw. Note that $A_8$ is the event that he makes all $7$ shots in a row.\\
+
+Then we have that the $\{A_i\}$ partition the entire samples space. We then note that $P(A_1) = q$, $P(A_2) = pq$, and so on, so that $P(A_i) = p^{i-1}q = p^{i-1} - p^i$ for $i < 8$, and we have $P(A_8) = p^7$. \\
+
+Next, we note that if $A_8$ occurs, then $E(X \mid A_8) = 7$ (as it only took the basketball player 7 shots to get a 7 shot streak). For the other cases, note that if the event $A_i$ occurs, then the player has essentially thrown away the first $i$ shots. Therefore, the game has reset, and we would have:
+$$
+E(X \mid  A_i) = i + E(X)
+$$
+We now have a set of recursive equations.
+
+\begin{align*}
+E(X) &= \sum_{i=1}^{8} E(X \mid A_i)P(A_i) \\
+&= \sum_{i=1}^7 (i + E(X))p^{i-1}q + 7p^7 \\
+&= q\sum_{i=1}^7 ip^{i-1} + qE(X)\sum_{i=1}^7 p^{i-1} + 7p^7 \\
+&= \sum_{i=1}^7 ip^{i-1} - \sum_{i=1}^7 ip^i + E(X)[\sum_{i=1}^7 p^{i-1} - \sum_{i=1}^7 p^{i}] + 7p^7 \\
+&= 1 + p + p^2 + \cdots + p^6 - 7p^7 + E(X)[1 - p^7] + 7p^7 \\
+\implies E(X) &= \frac{1 + p + p^2 \cdots p^6}{p^7}
+\end{align*}
+\end{solution}
+
+
+\begin{exercise}[Chicken and Egg Revisited]
+Let's recall the Chicken and Egg problem: there are $N \sim \Pois(\lambda)$ eggs, of which $X \mid N =n \sim \Bin(n,p)$ hatch and $Y \mid N = n = n - X$ don't hatch.
+\begin{enumerate}
+\item What is the expected number of eggs that will hatch?
+\item What is the variance in the number of eggs that will hatch?
+\item Given that you know the number of eggs that hatched, what's the expected number of total eggs?
+\item For each egg that hatches, you will receive a commission proportional to the total number of eggs that you attempted to hatch. How much do you expect to make, given proportionality constant $c$?
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+
+Solutions :)
+\begin{enumerate}[a)]
+
+\item We can use Adam's Law.
+$$
+E_X(X) = E_{N}(E_{X\mid N}(X \mid N)) = E_N(pN) = pE_N(N) = p\lambda
+$$
+\item We can use Eve's Law:
+$$
+\var(X) = E(\var(X \mid N)) + \var(E(X \mid N)) = E(Npq) + \var(Np) = pq\lambda + p^2\lambda = \lambda p
+$$
+\item Note that by the chicken and egg story, we know $X \indep Y$. Therefore, it follows that $E(Y \mid X) = E(Y) = \lambda q$. Therefore, because the total number of eggs given $X$ is $N \mid X$:
+$$
+E(N \mid X) = E(X + Y \mid X) = E(X\mid X) + E(Y \mid X) = X + \lambda q
+$$
+\item Note that our commission is given by $c NX$, because for each egg that hatches, we receive $xN$ dollars. Then we have:
+$$
+E(NX) = \cov(N,X) + E(N)E(X) = \lambda p + \lambda(\lambda p) = \lambda(1 + \lambda)p
+$$
+\end{enumerate}
+\end{solution}
+
+\begin{exercise} [Normal and Normal squared]
+Let $Z \sim N(0,1)$, $Y = Z^2$.
+\begin{enumerate}
+\item Find $E(Y|Z)$ and $E(Z|Y)$.
+
+\item Find $Var(Y|Z)$ and $Var(Z|Y)$.
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\begin{enumerate}
+\item $$E(Y|Z) = E(Z^2|Z) = Z^2$$
+by taking out what's known.
+$$E(Z|Y) = E(Z|Z^2) = 0$$
+by symmtery.
+
+\item Conditional on knowing the value of $Z$, $Y$ is just a constant, so $Var(Y|Z) = 0$. For the other direction,
+
+$$Var(Z|Y) = Var(Z|Z^2) = E(Z^2|Z^2) - (E(Z|Z^2))^2 = E(Z^2|Z^2) = Z^2$$
+\end{enumerate}
+\end{solution}
+
+\begin{exercise}[Normal Order Statistics]
+Let $X_1,...,X_{10} \sim \N(0,1)$ i.i.d. Additionally, let $Y\sim \Bin(10,0.5)$. If $X_{(5)}$ is the $5$th order statistic among the Normals, prove that $P(X_{(4)} \le 0) = P(Y\ge 4)$
+\end{exercise}
+
+\begin{solution}
+We solve this question using indicators. Define $Y_i = 1$ if $X_i \le 0$ and $Y_i = 0$ otherwise. It immediately follows that $P(Y_i=1)=0.5$ (because of symmetry of the Normal distribution) and all of the $Y_i$'s are independent of each other.\\
+\\
+We define $Y = \sum_{i=1}^{10} Y_i$ which is the total number of $X_i$'s that are less than 0. Then in this case, $Y \sim Bin(n, 0.5)$. The event $X_{(4)} \le 0$ means that the 4th smallest $X_i$ is no greater than 0. $Y \ge 4$ means that at least 4 out of the $n$ $X_i$'s are less than 0. These events are in reality identical! Therefore, it follows that $P(X_{(4)} \le 0) = P(Y \ge 4)$.
+\end{solution}
+
+\pagebreak
+
+\section*{Named and Famed Distributions}
+\subsection*{Discrete Distributions}
+\begin{center}
+\renewcommand{\arraystretch}{3}
+\begin{tabular}{cccccc}
+\textbf{Distribution} & \textbf{PDF and Support} & \textbf{EV}  & \textbf{Var} & \textbf{MGF}\\
+\hline
+\shortstack{Bernoulli \\ \Bern($p$)} & \shortstack{$P(X=1) = p$ \\$ P(X=0) = q$} & $p$ & $pq$ & $q + pe^t$ \\
+\hline
+\shortstack{Binomial \\ \Bin($n, p$)} & \shortstack{$P(X=k) = {n \choose k}p^k(1-p)^{n-k}$  \\ $k \in \{0, 1, 2, \dots n\}$}& $np$ & $npq$ & $(q + pe^t)^n$ \\
+\hline
+\shortstack{Geometric \\ \Geom($p$)} & \shortstack{$P(X=k) = q^kp$  \\ $k \in \{$0, 1, 2, \dots $\}$}& $\frac{q}{p}$ & $\frac{q}{p^2}$ & $\frac{p}{1-qe^t}, qe^t < 1$\\
+\hline
+\shortstack{Negative Binomial \\ \NBin($r, p$)} & \shortstack{$P(X=n) = {n+r - 1 \choose r -1}p^rq^n$ \\ $n \in \{$0, 1, 2, \dots $\}$} & $r\frac{q}{p}$ & $r\frac{q}{p^2}$ &  $(\frac{p}{1-qe^t})^r, qe^t < 1$\\
+\hline
+\shortstack{Hypergeometric \\ \Hypergeometric($w, b, n$)} & \shortstack{$P(X=k) = \sfrac{{w \choose k}{b \choose n-k}}{{w + b \choose n}}$ \\ $k \in \{$0, 1, 2, \dots $\}$} & $n\frac{w}{b+w}$ &&  \\
+\hline
+\shortstack{Poisson \\ \Pois($\lambda$)} & \shortstack{$P(X=k) = \frac{e^{-\lambda}\lambda^k}{k!}$ \\ $k \in \{$0, 1, 2, \dots $\}$} & $\lambda$ & $\lambda$ & $e^{\lambda(e^t-1)}$ \\
+\hline
+\shortstack{Multinomial \\ \Mult$_k(n, \vec{p}$)} & \shortstack{$P(\vec{X} = \vec{n}) = {n \choose n_1n_2\dots n_k}p_1^{n_1}\dots p_k^{n_k}$ \\ $n = n_1 + n_2 + \dots + n_k$} & $n\vec{p}$ & \shortstack{$\var(X_i) = np_i(1-p_i)$ \\ $\cov(X_i, X_j) = -np_ip_j$} &  \\
+
+\end{tabular}
+\end{center}\subsection*{Continuous Distributions}
+\begin{center}
+\renewcommand{\arraystretch}{3}
+\begin{tabular}{cccccc}
+\textbf{Distribution} & \textbf{PDF and Support} & \textbf{EV}  & \textbf{Var}  & \textbf{MGF}\\
+\hline
+
+\shortstack{Uniform \\ \Unif($a, b$)} & \shortstack{$ f(x) = \frac{1}{b-a}, x \in [a, b] $ \\$ f(x) = 0, x \notin [a, b]$} & $\frac{a+b}{2}$ & $\frac{(b-a)^2}{12}$ &  $\frac{e^{tb}-e^{ta}}{t(b-a)}$\\
+\hline
+\shortstack{Normal \\ $\N(\mu, \sigma^2)$} & \shortstack{$f(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{(x - \mu)^2}{2 \sigma^2}}$ \\ $x \in (-\infty, \infty)$} & $\mu$  & $\sigma^2$ & $e^{t\mu + \frac{\sigma^2t^2}{2}}$\\
+\hline
+\shortstack{Exponential \\ $\Expo(\lambda)$} & \shortstack{$f(x) = \lambda e^{-\lambda x}, x \in [0, \infty)$\\$ f(x) = 0, x \notin [0, \infty)$} & $\sfrac{1}{\lambda}$  & $\sfrac{1}{\lambda^2}$ & $\frac{\lambda}{\lambda - t}, t < \lambda$\\
+\hline
+\shortstack{Multivariate Uniform \\ A is area of support} & \shortstack{$f(x) = \frac{1}{A}, x \in A$\\$ f(x) = 0, x \notin A $} & $$  & ~ & $$\\
+\hline
+\shortstack{Gamma \\ $\Gam(a, \lambda)$} & \shortstack{$f(x) = \frac{1}{\Gamma(a)}(\lambda x)^ae^{-\lambda x}\frac{1}{x}$\\$ x \in [0, \infty)$} & $\frac{a}{\lambda}$  & $\frac{a}{\lambda^2}$ & $\left(\frac{\lambda}{\lambda - t}\right)^a, t < \lambda$\\
+\hline
+\shortstack{Beta \\ \Beta(a, b)} & \shortstack{$f(x) = \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}x^{a-1}(1-x)^{b-1}$\\$x \in [0, 1] $} & $\mu = \frac{a}{a + b}$  & $\frac{\mu(1-\mu)}{a + b + 1}$ & $$\\
+\hline
+
+\end{tabular}
+\end{center}
+
+\end{document}

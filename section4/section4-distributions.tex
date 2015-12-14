@@ -1,0 +1,282 @@
+\documentclass[11pt]{article}
+\usepackage{../stat110}
+\usepackage{graphicx}
+\usepackage{epigraph}
+\usepackage{hyperref}
+
+%\STAFF
+
+\begin{document}
+\SectionNotes{4}{Random Variables and Distributions}{Luis Perez (luisperez@college.harvard.edu)}{Aidi Zhang (aidizhang@college.harvard.edu)}
+
+\setlength{\epigraphwidth}{.6\textwidth}
+\epigraph{“Facts are stubborn things, but statistics are pliable.” .}{Mark Twain}
+
+\section*{Administrivia}
+The below review notes are courtesy of William Chen and Sebastian Chiu, with modifications.
+
+Other than that, no more information here!
+
+\section*{Distributions}
+\begin{description}
+
+\item[Don't confuse a random variable with its distribution!] A distribution is like a blueprint for a house, and the random variable is the house itself. Distributions can be described in a variety of ways, including the CDF or the PMF. The \textbf{support} of a random variable is the set of possible values that it can take.
+
+
+\item[Probability Mass Function (PMF)] (Discrete Only) is a function that takes in the value $x$, and gives the probability that a random variable takes on the value $x$. The PMF is a positive-valued function, and $\sum_x P(X=x) = 1$
+\begin{center}
+$P_X(x) = P(X=x)$
+\end{center}
+
+\item[Cumulative Distribution Function (CDF)] is a function that takes in the value $x$, and gives the probability that a random variable takes on the value at most $x$.
+\[F(x) = P(X \leq x)\]
+
+
+\end{description}
+
+
+\section*{Expected Value, Linearity, and Symmetry}
+\begin{description}
+\item[Expected Value] (aka \emph{mean}, \emph{expectation}, or \emph{average}) can be thought of as the ``weighted average'' of the possible outcomes of our random variable. Mathematically, if $x_1, x_2, x_3, \dots$ are all of the possible values that $X$ can take, the expected value of $X$ can be calculated as follows:
+\begin{center}
+$E(X) = \sum\limits_{i}x_iP(X=x_i)$
+\end{center}
+Note that for \emph{any} $X$ and $Y$, $a$ and $b$ scaling coefficients and $c$ is our constant, the following property of \textbf{Linearity of Expectation} holds:
+
+\[E(aX + bY + c) = aE(X) + bE(Y) + c \]
+
+If two Random Variables have the same distribution, \emph{even when they are dependent}, by the property of \textbf{Symmetry} their expected values are equal.
+
+
+
+\item[Conditional Expected Value] is calculated like expectation, only conditioned on any event A. \begin{center}
+$\ E(X | A) = \sum\limits_{x}xP(X=x | A)$
+\end{center}
+
+\end{description}
+
+\section*{Indicator Random Variables}
+\begin{description}
+\item[Indicator Random Variables] is random variable that takes on either 1 or 0. The indicator is always an indicator of some event. If the event occurs, the indicator is 1, otherwise it is 0. They are useful for many problems that involve counting and expected value.
+\item[Distribution] $I_A \sim \Bern(p)$ where $p = P(A)$
+\item[Fundamental Bridge] The expectation of an indicator for $A$ is the probability of the event. $E(I_A) = P(A)$. Notation:
+
+\[
+I_A =
+ \begin{cases}
+   1 & \text{A occurs} \\
+   0 & \text{A does not occur}
+  \end{cases}
+\]
+
+
+
+\end{description}
+
+\section*{Bernoulli and Binomial Distributions}
+
+\begin{description}
+\item[Bernoulli] The Bernoulli distribution is the simplest case of the Binomial distribution, where we only have one trial, or $n=1$. Let us say that X is distributed \Bern($p$). We know the following:
+\begin{description}
+  \item[Story.] $X$ ``succeeds'' (is 1) with probability $p$, and $X$ ``fails'' (is 0) with probability $1-p$.
+  \item[Example.] A fair coin flip is distributed \Bern($\frac{1}{2}$).
+  \item[PMF.] The probability mass function of a Bernoulli is:
+\[P(X = x) = p^x(1-p)^{1-x}\]
+or simply
+\[P(X = x) = \begin{cases} p, & x = 1 \\ 1-p, & x = 0 \end{cases}\]
+\end{description}
+
+\item[Binomial] Let us say that $X$ is distributed \Bin($n,p$). We know the following:
+\begin{description}
+  \item[Story] $X$ is the number of ``successes'' that we will achieve in $n$ independent trials, where each trial can be either a success or a failure, each with the same probability $p$ of success. We can also say that $X$ is a sum of multiple independent $Bern(p)$ random variables. Let $X \sim \Bin(n, p)$ and $X_j \sim \Bern(p)$, where all of the Bernoullis are independent. We can express the following:
+  \[X = X_1 + X_2 + X_3 + \dots + X_n\]
+  \item[Example] If Jeremy Lin makes 10 free throws and each one independently has a $\frac{3}{4}$ chance of getting in, then the number of free throws he makes is distributed  \Bin($10,\frac{3}{4}$), or, letting X be the number of free throws that he makes, X is a Binomial Random Variable distributed  \Bin($10,\frac{3}{4}$).
+  \item[PMF] The probability mass function of a Binomial is:
+\[P(X = x) = {n  \choose x} p^x(1-p)^{n-x}\]
+  \item[Binomial Coefficient] ${n  \choose k}$ is a function of $n$ and $k$ and is read \emph{n choose k}, and means out of $n$ possible distinguishable objects, how many ways can I possibly choose $k$ of them? The formula for the binomial coefficient is:
+\[{n  \choose k} = \frac{n!}{k!(n-k)!}\]
+\end{description}
+\end{description}
+
+
+
+\section*{Geometric, and Hyper-geometric Distributions}
+
+\begin{description}
+
+\item[Geometric] Let us say that $X$ is distributed $\Geom(p)$. We know the following:
+
+\begin{description}
+  \item[Story] $X$ is the number of ``failures'' that we will achieve before we achieve our first success. Our successes have probability $p$.
+  \item[Example] If each pokeball we throw has a $\frac{1}{10}$ probability to catch Mew, the number of failed pokeballs will be distributed $\Geom(\frac{1}{10})$.
+  \item[PMF] With $q = 1-p$, the probability mass function of a Geometric is:
+\[P(X = k) = q^kp\]
+\end{description}
+
+\item[Hypergeometric] Let us say that $X$ is distributed $\Hypergeometric(w, b, n)$. We know the following:
+\begin{description}
+  \item[Story] In a population of $b$ undesired objects and $w$ desired objects, $X$ is the number of ``successes'' we will have in a draw of $n$ objects, without replacement.
+  \item[Example]
+  Here are a few examples. Pick the one that helps you remember it the best.
+  \begin{enumerate}
+  \item Let's say that we have only $b$ Weedles (failure) and $w$ Pikachus (success) in Viridian Forest. We encounter $n$ of the Pokemon in the forest, and $X$ is the number of Pikachus in our encounters.
+  \item The number of aces that you draw in 5 cards (without replacement).
+  \item You have $w$ white balls and $b$ black balls, and you draw $b$ balls. $X$ is the number of white balls you will draw in your sample.
+  \item Elk Problem - You have $N$ elk, you capture $n$ of them, tag them, and release them. Then you recollect a new sample of size $m$. How many tagged elk are now in the new sample?
+  \end{enumerate}
+  \item[PMF] The probability mass function of a Hypergeometric is:
+\[P(X = k) = \frac{{w \choose k}{b \choose n-k}}{{w + b \choose n}}\]
+\end{description}
+\end{description}
+
+
+\section*{Discrete Distributions}
+\begin{center}
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{cccccc}
+\textbf{Distribution} & \textbf{PDF and Support} & \textbf{Expected Value}  & \textbf{Equivalent To}\\
+\hline
+\shortstack{Bernoulli \\ \Bern($p$)} & \shortstack{$P(X=1) = p$ \\$ P(X=0) = q$} & $p$ & $\Bin(1, p)$ \\
+\hline
+\shortstack{Binomial \\ \Bin($n, p$)} & \shortstack{$P(X=k) = {n \choose k}p^k(1-p)^{n-k}$  \\ $k \in \{0, 1, 2, \dots n\}$}& $np$ & Sum of $n$ independent Bern($p$) \\
+\hline
+\shortstack{Geometric \\ \Geom($p$)} & \shortstack{$P(X=k) = q^kp$  \\ $k \in \{$0, 1, 2, \dots $\}$}& $\frac{q}{p}$ & \\
+\hline
+\shortstack{Hypergeometric \\ \Hypergeometric($w, b, n$)} & \shortstack{$P(X=k) = \sfrac{{w \choose k}{b \choose n-k}}{{w + b \choose n}}$ \\ $k \in \{$0, 1, 2, \dots $\}$} & $n\frac{w}{b+w}$ &  \\
+\end{tabular}
+\end{center}
+
+\section*{Practice Problems}
+
+\begin{exercise}[Properties of the Binomial]
+Answer the following:
+\begin{enumerate}
+\item Suppose $X \sim Bin(n_1,p)$ and independently $Y \sim Bin(n_2,p)$. What is the distribution of $X+Y$? Explain.
+
+\item What is $P(X \ge 2)$?
+
+\item What is $P(X+Y = 10)$? Assume that $n_1+n_2 \ge 10$.
+
+\item What is one reason why $X-Y$ can't be Binomial?
+
+\item Can you construct two random variables $X$ and $Y$ both distributed $Bin(3, 1)$ such that $P(X = Y) = 0$?
+\end{enumerate}
+\end{exercise}
+
+\begin{solution}
+\begin{enumerate}
+\item Intuitively, we can use a story argument to determine the distribution of $X + Y$ . Let’s say we have a coin
+that is heads with probability $p$. $X$ then is a random variable that takes on the distribution of the number
+of heads obtained if we flip the coin $n_1$ times and $Y$ is a random variable that takes on the distribution of
+the number of heads obtained if we flip the coin $n_2$ times. Note that $X$ and $Y$ are independent of each other.
+$X + Y$ is therefore a the random variable that represents the number of heads in $n_1 + n 2$ flips of the coin. Thus,
+it follows that $X + Y \sim \Bin(n_1 + n_2 , p)$.
+\item Typically, when calculating probability statements, it is always useful to consider the complement of the
+event that we are calculating the probability of. That is, in this situation, we should see that
+$$P (X \geq 2) = 1-P (X < 2) = 1-P (X \leq 1) = 1-P (X = 0)-P (X = 1)$$. It immediately follows based off
+of our understanding of the binomial PMF that
+$$P (X \geq 2) = 1-P (X = 0)-P (X = 1) = 1-(1-p)^{n_1}-n_1p(1-p)^{n_1 - 1}$$
+\item We can calculate this directly using the PMF of the Binomial.
+$$
+P(X+Y=10) = {n_1 + n_2 \choose 10}p^{10}(1-p)^{n_1+n_2-10}
+$$
+\item The value $X - Y$ could be negative.
+\end{enumerate}
+\end{solution}
+
+
+\begin{exercise}[Flipping Coins]
+Aidi flips a fair coin $n$ times and Luis flips a fair coin $n+1$ times. What is the probability that Aidi flips fewer heads than Luis does?
+\end{exercise}
+\begin{solution}
+Let $A$ be the number of heads Aidi flips and $L$ be the number of heads Luis flips. We want to calculate $P (A < L)$. Since they are both flipping a fair coin, $A \sim \Bin(n, \frac{1}{2})$ and $L \sim \Bin(n + 1, \frac{1}{2})$. Note that $A \sim n - A$ by symmetry (that is, the random variable $A$ is distributed the same as the random variable $n-A$ and $L \sim n+1-L$. Therefore,
+
+$$P(A < L) = P(n - A < n + 1 - L) = P(L < A + 1) = P(L \leq A)$$
+
+But note that $A \ge L$ is the complement of the event $A < L$ (so $P(A<L)+P(A \ge L) =1$). So, if $P(A < L) = P(A \ge L)$, then it follows that $P(A < L) = 1/2$.
+
+\end{solution}
+
+\begin{exercise}[Expected Value]
+I'm going to ask you to play a game. The game consists of a dice role, followed by the flip of a fair coin. If the coin lands heads, I'll pay you the value of your roll. Otherwise, if you roll an odd number, I'll pay you twice as much. If you roll an even number, I'll pay you half as much.
+
+I will charge you an entry fee of $\$4$ to play the game. How many rounds of the game do you play? What if I charge you a fee of $\$3.60$.
+\end{exercise}
+
+\begin{solution}
+From the above, we wouldn't play the game if we're charged $4$, and we would play the game an infinite number of times if we're charged $3.60$.
+
+We can check this by calculating the expected value.
+\begin{align*}
+E(X) &= E(X|H)P(H) + E(X|H^c)P(H^c) \\
+&= \frac{1}{2} \cdot 3.5 + \frac{1}{2} \cdot \frac{1}{6} \cdot (2 + 1 + 6 + 2 + 10 + 3) \\
+&= \frac{7}{4} + 2  \\
+&= 3.75
+\end{align*}
+\end{solution}
+
+\begin{exercise}[Conditional Success!]
+Sarah is preparing for the \href{http://xgames.espn.go.com/}{X-Games}. Over the last several years, she's practiced quite a few bike stunts. In particular, she's known for the backwards triple flip (see \href{https://www.youtube.com/watch?v=WFLwxGB1qFI}{here} for more). In fact, despite the difficulty of this stunt, she's practiced it so often that she succeeds with probability $p = \frac{1}{2}$.
+
+How many times do you think Sarah has to try her stunt before she gets it two times in a row?
+
+As a bonus question, can you generalize the above to three? Four? What about $n$ times in a row? What about for arbitrary $p$.
+\end{exercise}
+\begin{solution}
+Let $X$ be the number of times Sarah must attempt her stunt before she succeeds twice in a row. We want to calculate $E(X)$.
+
+We can do this by conditioning on his first attempt. Let $S_1$ be the event that Sarah succeeds in her first attempt. Then using conditional expectation:
+$$
+E(X) = \frac{1}{2} \cdot (1 + E(X|S_1)) + \frac{1}{2} \cdot (1 + E(X|S_1^c)
+$$
+Note that if Sarah does not succeed in her first attempt, then she's right back where we started (Equation 1). Additionally, note that we can further condition on her second attempt to tease out the scenario where she does succeed (Equation 2).
+\begin{align}
+E(X|S_1^c) &= E(X) \\
+E(X|S_1) &= \frac{1}{2} \cdot (1 + E(X|S_1,S_2)) + \frac{1}{2} \cdot (1 + E(X|S_1,S_2^c))
+\end{align}
+For Equation (2), if Sarah fails on her second attempt, then she's essentially restarting the process. If she succeeds after succeeding on her first attempt, then there are no more attempts left (she's succeed in having two successful attempts in a row).
+Taking everything together:
+
+\begin{align*}
+E(X|S_1,S_2) &= 0 \\
+E(X|S_1,S_2^c) &= E(X) \\
+\implies E(X) &= 1 + E(X)
+\end{align*}
+
+We can now put this together into a single equation, and given that $E(X)$ is our only unknown, we can solve.
+
+The result is $E(X) = 6$.
+\end{solution}
+
+\begin{exercise}[Texas Hold'Em]
+In Texas Hold'Em, players combine two of the cards (which they're holding) with $5$ community cards that are eventually turned up on the table. The game is played with a standard deck of cards.
+
+For the uninitiated, a \textbf{flush} is a hand where all $5$ cards belong to the same suit.
+
+Suppose a player has $2$ hearts in his hand and there are $3$ other cards showing on the table (community cards). Of the these, $2$ are also hearts. What is the probability that the player completes a flush?
+
+\end{exercise}
+\begin{solution}
+There are $4$ hearts showing, so there are $9$ we've yet to see. There are $5$ cards showing ($2$ in the hand and $3$ on the table), so there are $52-5 = 47$ still unseen.
+
+The probability that one of the next two cards turned is a heart (and a flush is achieved) can be calculated using the Hyper-Geometric distribution with $k \in \{1,2\}, n = 2, K = 9, N = 47$.
+$$
+\frac{{9 \choose 1}{38 \choose 1}}{{47 \choose 2}} + \frac{{9 \choose 2}}{{47 \choose 2}}
+$$
+\end{solution}
+
+
+\begin{exercise}[Coupon Collector!]
+There are $N$ distinct types of coupons in cereal boxes and each type is equally likely to be in a box. If a child wants to collect a complete set of coupons with at least one of each type, how many boxes on average are needed to make such a complete set?
+\end{exercise}
+\begin{solution}
+Define variable $X_i$ as the random variable representing the number of coupons needed to discover the $i$th coupon after discovering the $i-1$th coupong. For example $X_1 = 1$, $X_2$ would be the number of cereal boxes needed to discover the second coupon after the first, and so on. After $i-1$ coupons have been collected, each box has probability $\frac{N-i+1}{N}$ to contain a new type of coupon. Hence
+
+$$X_i \sim \Geom(\frac{N-i+1}{N})$$
+
+Thus we have $E(X_i) = 1 + \frac{1-p_i}{p_i} = \frac{N}{N-i+1}$. The number of boxes in total would be
+
+$$\sum_{i=1}^N E(X_i) = \sum_{i=1}^N \frac{N}{N-i+1} = N(1+\frac{1}{2} + ... + \frac{1}{N})$$
+\end{solution}
+
+\end{document}
